@@ -1,0 +1,26 @@
+{
+  "name": "oc_stick_figure",
+  "version": "alpha.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "set VITE_DEV_SERVER_URL=http://localhost:5173&& concurrently \"tsc -w\" \"vite\" \"powershell -NoProfile -Command Copy-Item -Force src\\preload.cjs dist\\preload.cjs\" \"wait-on http://localhost:5173 && electron dist/main.js\"",
+    "build": "vite build && tsc && powershell -NoProfile -Command Copy-Item -Force src\\preload.cjs dist\\preload.cjs",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^28.3.3",
+    "pixi-spine": "^3.1.2",
+    "pixi.js": "^6.5.10",
+    "uiohook-napi": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "concurrently": "^9.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.6",
+    "wait-on": "^9.0.3"
+  }
+}

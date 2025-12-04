@@ -1,0 +1,48 @@
+
+gardin.png
+size: 378,804
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+RightLeg
+  rotate: true
+  xy: 2, 633
+  size: 130, 363
+  orig: 130, 364
+  offset: 0, 0
+  index: -1
+body
+  rotate: true
+  xy: 2, 765
+  size: 37, 282
+  orig: 37, 282
+  offset: 0, 0
+  index: -1
+head
+  rotate: true
+  xy: 2, 2
+  size: 319, 357
+  orig: 321, 359
+  offset: 1, 1
+  index: -1
+leftArm
+  rotate: false
+  xy: 2, 323
+  size: 190, 170
+  orig: 190, 170
+  offset: 0, 0
+  index: -1
+leftLeg
+  rotate: true
+  xy: 2, 495
+  size: 136, 369
+  orig: 136, 369
+  offset: 0, 0
+  index: -1
+rightArm
+  rotate: false
+  xy: 194, 323
+  size: 182, 170
+  orig: 182, 171
+  offset: 0, 0
+  index: -1
