@@ -1,3 +1,2 @@
-
-export  type Animation =
-"stand"|"walk"|  "jump"
+export  type characterAnimation =
+"stand"|"walk"|  "jump"|"holdHead"|"lookAround"|"open";

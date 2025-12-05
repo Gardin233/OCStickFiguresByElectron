@@ -1,4 +1,9 @@
 // src/preload.ts
+
+import { win } from "./main.js";
+import { convertToLocal } from "./server/utils/position.js";
+import { icon } from "./types/desktop.js";
+
 /**
  * @description Preload script for Electron
  * This script is useless because of something I dont know how to solve.
@@ -25,5 +30,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   onGlobalKeyDown: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => {
     ipcRenderer.on('global-key-down', (_, ev) => callback(ev))
+  },
+  getDesktopIcons: (callback: (icons: icon[]) => void) => {
+  ipcRenderer.on('get-desktop-icons', (_, icons: icon[]) => callback(icons))
+},
+ simulateDoubleClick: (pos: { x: number; y: number }) => {
+    pos =convertToLocal(win,pos.x,pos.y)
+    ipcRenderer.send('simulate-double-click', pos);
   }
+
 })

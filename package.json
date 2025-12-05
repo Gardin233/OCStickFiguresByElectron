@@ -1,16 +1,39 @@
 {
   "name": "oc_stick_figure",
-  "version": "alpha.1.0",
+  "author": {
+    "name": "Gardin",
+    "email": "gardin233@gmail.com"
+  },
+  "version": "1.0.1-alpha",
   "private": true,
   "main": "dist/main.js",
   "type": "module",
+  "build": {
+    "appId": "com.gardin.oc_stick_figure",
+    "productName": "oc_stick_figure",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist",
+      "dist-electron",
+      "!**/*.map"
+    ],
+    "extraResources": [
+      {
+        "from": "./external",
+        "to": "./external"
+      }
+    ]
+  },
   "scripts": {
     "dev": "set VITE_DEV_SERVER_URL=http://localhost:5173&& concurrently \"tsc -w\" \"vite\" \"powershell -NoProfile -Command Copy-Item -Force src\\preload.cjs dist\\preload.cjs\" \"wait-on http://localhost:5173 && electron dist/main.js\"",
     "build": "vite build && tsc && powershell -NoProfile -Command Copy-Item -Force src\\preload.cjs dist\\preload.cjs",
-    "start": "electron ."
+    "start": "electron .",
+    "app:dir": "electron-builder --dir",
+    "app:dist": "electron-builder"
   },
   "dependencies": {
-    "electron": "^28.3.3",
     "pixi-spine": "^3.1.2",
     "pixi.js": "^6.5.10",
     "uiohook-napi": "^1.5.4"
@@ -18,6 +41,8 @@
   "devDependencies": {
     "@types/node": "^24.10.1",
     "concurrently": "^9.2.1",
+    "electron": "^28.3.3",
+    "electron-builder": "^26.0.12",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vite": "^7.2.6",

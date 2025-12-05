@@ -2,6 +2,9 @@ import * as PIXI from 'pixi.js'
 import { Attachment,BoundingBoxAttachment, Spine } from '@pixi-spine/runtime-3.8'
 import { AttachmentType } from 'pixi-spine'
 import { app } from '../renderer.js'
+import { characterAnimation } from '../types/animation.js'
+import { pointToSegmentDistance } from '../client/utils/pos.js'
+import { win } from '../main.js'
 
 
 /**
@@ -25,8 +28,10 @@ export class SpineCharacter {
   private loader = PIXI.Loader.shared
   private stage: PIXI.Container
   private boundingBoxes: PIXI.Graphics[] = []; 
-  private speed = 0.2;
-
+  private speed = 0.25;
+  private isWalking = false
+  private toLeft = true
+  public state:characterAnimation='stand'
   constructor(stage: PIXI.Container) {
     this.stage = stage
     this.container = new PIXI.Container()
@@ -34,6 +39,13 @@ export class SpineCharacter {
     this.stage.addChild(this.container)
     // 监听窗口大小变化，动态更新模型位置及点击区域
     window.addEventListener('resize', this.onResize.bind(this))
+    app.ticker.add(() => {
+    // 每帧更新位置
+    if(this.isWalking) {
+       this.spine.x += (this.toLeft ? -1 : 1) * this.speed; 
+    }
+     
+    })
   }
 
   /**
@@ -134,20 +146,64 @@ public getHitBoundingBox(globalX: number, globalY: number): string | null {
   console.log('未命中任何碰撞箱');
   return null;
 }
+/**
+ * 点到线段的最短距离
+ */
 
-  /**
-   * 判断一个全局坐标是否在模型范围内
-   * 可用于更复杂的命中检测逻辑
-   */
-  public isPointInside(globalX: number, globalY: number): boolean {
-    if (!this.spine) return false
-    const w = this.spine.width
-    const h = this.spine.height
-    const left = this.spine.x - w / 2
-    const top = this.spine.y - h / 2
-    return (globalX >= left && globalX <= left + w &&
-            globalY >= top && globalY <= top + h)
+/**
+ * 获取离鼠标最近的碰撞箱名称 + 该碰撞箱的距离
+ */
+public getClosestBoundingBox(globalX: number, globalY: number): {
+  name: string | null,
+  distance: number
+} {
+  if (!this.spine) return { name: null, distance: Infinity };
+
+  const skeleton = this.spine.skeleton;
+  skeleton.updateWorldTransform();
+
+  let closestName: string | null = null;
+  let minDist = Infinity;
+
+  for (const slot of skeleton.slots) {
+    const attachment = slot.getAttachment();
+    if (!attachment || attachment.type !== AttachmentType.BoundingBox) continue;
+
+    const bb = attachment as BoundingBoxAttachment;
+    const verts: number[] = new Array(bb.worldVerticesLength);
+    bb.computeWorldVertices(slot, 0, bb.worldVerticesLength, verts, 0, 2);
+
+    // 局部坐标→全局坐标
+    const worldVerts: number[] = []
+    for (let i = 0; i < verts.length; i += 2) {
+      const p = this.spine.toGlobal(new PIXI.Point(verts[i], verts[i + 1]));
+      worldVerts.push(p.x, p.y);
+    }
+
+    // 如果点在多边形内 → 为0，直接返回最近
+    if (this.pointInPolygon(globalX, globalY, worldVerts)) {
+      return { name: slot.data.name, distance: 0 };
+    }
+
+    // 点到多边形每条边求最小距离
+    let dist = Infinity;
+    for (let i = 0; i < worldVerts.length; i += 2) {
+      const x1 = worldVerts[i];
+      const y1 = worldVerts[i + 1];
+      const j = (i + 2) % worldVerts.length;
+      const x2 = worldVerts[j];
+      const y2 = worldVerts[j + 1];
+      const d = pointToSegmentDistance(globalX, globalY, x1, y1, x2, y2);
+      if (d < dist) dist = d;
+    }
+    if (dist < minDist) {
+      minDist = dist;
+      closestName = slot.data.name;
+    }
   }
+  return { name: closestName, distance: minDist };
+}
+
 /**
  * 显示 Spine 碰撞箱的真实范围
  * 每帧调用以跟随动画实时更新
@@ -161,13 +217,10 @@ public debugBoundingBoxes() {
   for (const slot of skeleton.slots) {
     const attachment = slot.getAttachment();
     if (!attachment || attachment.type !== AttachmentType.BoundingBox) continue;
-
     const bb = attachment as BoundingBoxAttachment;
     const vertsCount = bb.worldVerticesLength;
     const verts: number[] = new Array(vertsCount);
-
     bb.computeWorldVertices(slot, 0, vertsCount, verts, 0, 2);
-
     let g: PIXI.Graphics;
     if (this.boundingBoxes[index]) {
       g = this.boundingBoxes[index];
@@ -177,9 +230,7 @@ public debugBoundingBoxes() {
       this.container.addChild(g);
       this.boundingBoxes.push(g);
     }
-
     g.lineStyle(2, 0xff0000);
-
     // Spine 世界坐标 → 屏幕坐标
     const first = this.spine.toGlobal(new PIXI.Point(verts[0], verts[1]));
     g.moveTo(first.x, first.y);
@@ -222,12 +273,28 @@ public setPosition(x: number, y: number) {
     this.spine.state.addAnimation(0, 'stand', true, 0)
   }
   public walk(toLeft: boolean)  {
+    this.isWalking = true
     this.spine.state.setAnimation(0, 'walk', true)
-     // 翻转模型方向（仅x轴镜像）
-  this.spine.scale.x = (toLeft ? 1 : -1) * Math.abs(this.spine.scale.x);
-  app.ticker.add(() => {
-    // 每帧更新位置
-    this.spine.x += (toLeft ? -1 : 1) * this.speed; // 每帧移动2像素
-  })
+    this.toLeft = toLeft 
+    // 翻转模型方向（仅x轴镜像）
+    this.spine.scale.x = (this.toLeft ? 1 : -1) * Math.abs(this.spine.scale.x);
+    
+  }
+  public stopWalk() {
+  this.isWalking = false
+  this.spine.state.setAnimation(0, 'stand', true)
+  }
+  public holdHead() {
+    this.spine.state.setAnimation(0, 'holdHead', false)
+    // this.spine.state.addAnimation(0, 'stand', true, 0)
+  }
+  public lookAround() {
+    this.spine.state.setAnimation(0, 'lookAround', false)
+    this.spine.state.addAnimation(0, 'stand', true, 0)
+  }
+  public doubleClick(x:number,y:number) {
+    console.log('双击事件触发')
+    this.spine.state.setAnimation(0, 'open', false)
+    window.electronAPI.simulateDoubleClick({x:x,y:y})
 }
 }

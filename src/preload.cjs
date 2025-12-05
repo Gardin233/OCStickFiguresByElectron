@@ -15,5 +15,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   onGlobalKeyDown: (callback) => {
     ipcRenderer.on('global-key-down', (_, ev) => callback(ev))
+  },
+  getDesktopIcons: (callback)=> {
+      ipcRenderer.on('get-desktop-icons', (_, icons) => callback(icons))
+  },
+  simulateDoubleClick: (pos) => {
+    ipcRenderer.send('simulate-double-click', pos);
   }
 })
