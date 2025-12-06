@@ -12,14 +12,21 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onGlobalMouseDown: (callback) => {
     ipcRenderer.on('global-mouse-down', (_, info) => callback(info))
   },
+  onGlobalMouseUp: (callback) => {
+    ipcRenderer.on('global-mouse-up', (_, info) => callback(info))
+  },
 
   onGlobalKeyDown: (callback) => {
     ipcRenderer.on('global-key-down', (_, ev) => callback(ev))
   },
+  onGlobalKeyUp: (callback) => {
+    ipcRenderer.on('global-key-up', (_, ev) => callback(ev))
+  },
+  
   getDesktopIcons: (callback)=> {
       ipcRenderer.on('get-desktop-icons', (_, icons) => callback(icons))
   },
-  simulateDoubleClick: (pos) => {
-    ipcRenderer.send('simulate-double-click', pos);
-  }
+  openDesktopIcon: (name) => {
+      ipcRenderer.send('open-desktop-icon', name);
+    }
 })

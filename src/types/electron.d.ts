@@ -5,12 +5,14 @@ export {}
 declare global {
   interface Window {
     electronAPI: {
+    openDesktopIcon: (name: string) => Promise<any>,
     getDesktopIcons:(callback:(icons:icon[])=>void)=>void
     openEXE: (path: string) => Promise<any>;
-    simulateDoubleClick: (pos: { x: number; y: number }) => void;
     onGlobalMouseMove: (callback: (pos: { x: number; y: number }) => void) => void;
     onGlobalMouseDown: (callback: (data: { x: number; y: number; button: number }) => void) => void;
+    onGlobalMouseUp: (callback: (data: { x: number; y: number; button: number }) => void) => void;
     onGlobalKeyDown: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => void;
+    onGlobalKeyUp: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => void;
   }
 }
 }

@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js'
-import { Attachment,BoundingBoxAttachment, Spine } from '@pixi-spine/runtime-3.8'
+import { BoundingBoxAttachment, Spine } from '@pixi-spine/runtime-3.8'
 import { AttachmentType } from 'pixi-spine'
-import { app } from '../renderer.js'
-import { characterAnimation } from '../types/animation.js'
-import { pointToSegmentDistance } from '../client/utils/pos.js'
-import { win } from '../main.js'
+import { app } from '../../renderer.js'
+import { characterAnimation } from '../../types/animation.js'
+import { pointToSegmentDistance } from '../../client/utils/pos.js'
 
 
 /**
@@ -292,9 +291,24 @@ public setPosition(x: number, y: number) {
     this.spine.state.setAnimation(0, 'lookAround', false)
     this.spine.state.addAnimation(0, 'stand', true, 0)
   }
-  public doubleClick(x:number,y:number) {
-    console.log('双击事件触发')
+  public openDeskTopIcon(name:string) {
     this.spine.state.setAnimation(0, 'open', false)
-    window.electronAPI.simulateDoubleClick({x:x,y:y})
+    // 监听完成事件（只触发一次）
+  const onComplete = (trackEntry: any) => {
+  if (trackEntry.animation.name === 'open') {
+    console.log('动画播放完毕, 执行双击事件')
+    window.electronAPI.openDesktopIcon(name)
+
+    // 执行完之后立即解绑，避免重复触发
+    this.spine.state.removeListener(listener)
+  }
+}
+
+// Spine 官方要求监听器是对象
+const listener = {
+  complete: onComplete
+}
+
+this.spine.state.addListener(listener)
 }
 }

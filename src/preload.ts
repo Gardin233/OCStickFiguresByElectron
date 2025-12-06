@@ -27,16 +27,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onGlobalMouseDown: (callback: (data: { x: number; y: number; button: number }) => void) => {
     ipcRenderer.on('global-mouse-down', (_, info) => callback(info))
   },
-
+  onGlobalMouseUp: (callback: (data: { x: number; y: number; button: number }) => void) => {
+    ipcRenderer.on('global-mouse-up', (_, info) => callback(info))
+  },
   onGlobalKeyDown: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => {
     ipcRenderer.on('global-key-down', (_, ev) => callback(ev))
+  },
+  onGlobalKeyUp: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => {
+    ipcRenderer.on('global-key-up', (_, ev) => callback(ev))
   },
   getDesktopIcons: (callback: (icons: icon[]) => void) => {
   ipcRenderer.on('get-desktop-icons', (_, icons: icon[]) => callback(icons))
 },
- simulateDoubleClick: (pos: { x: number; y: number }) => {
-    pos =convertToLocal(win,pos.x,pos.y)
-    ipcRenderer.send('simulate-double-click', pos);
+openDesktopIcon: (name: string) => {
+    ipcRenderer.send('open-desktop-icon', name);
   }
-
 })

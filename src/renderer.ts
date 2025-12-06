@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { SpineCharacter } from './character/SpineCharacter.js';
+import { SpineCharacter } from './client/character/SpineCharacter.js';
 import type { icon } from './types/desktop.js';
+import { MixedLayer } from './client/effectsLayer/mixedLayer.js';
 let ICONS:icon[] =[]
 // 创建 PixiJS 应用
 export const app = new PIXI.Application({
@@ -35,6 +36,12 @@ async function boot() {
         character.holdHead();
       }
   });
+
+
+
+  //TODO:滤镜
+
+
 window.electronAPI.getDesktopIcons(icons => {
   ICONS=icons
   console.log('图标数据:', icons);
@@ -74,9 +81,8 @@ window.electronAPI.getDesktopIcons(icons => {
         character.jump();
         break;
       case 18: // E:
-        console.log(ICONS)
-          character.doubleClick(ICONS[1].position.x,ICONS[1].position.y);
-          break;
+        character.openDeskTopIcon(ICONS[0].target);
+        break;
       case 33: // F:
           character.lookAround();
           break;
