@@ -1,4 +1,5 @@
- export function pointToSegmentDistance(px: number, py: number,
+//两点距离计算
+export function pointToSegmentDistance(px: number, py: number,
                                x1: number, y1: number,
                                x2: number, y2: number): number {
   const A = px - x1;

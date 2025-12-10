@@ -7,7 +7,7 @@ declare global {
     electronAPI: {
     changeScreenFilter:(type:fullScreenFilter)=>Promise<any>
     openDesktopIcon: (name: string) => Promise<any>,
-    getDesktopIcons:(callback:(icons:icon[])=>void)=>void
+    getDesktopIcons:()=>Promise<icon[]>
     openEXE: (path: string) => Promise<any>;
     onGlobalMouseMove: (callback: (pos: { x: number; y: number }) => void) => void;
     onGlobalMouseDown: (callback: (data: { x: number; y: number; button: number }) => void) => void;

@@ -12,10 +12,12 @@
 
 ```plaintext
 ├── external                # 操作 WinAPI 的外部程序
+├── externalResource        # 外部程序源码 
 │
 ├── src                     # Electron 程序位置
 │   ├── client              # 用户逻辑存放处
 │   │   ├── character       # 角色
+│   │   ├── ipc             # 通信监听封装
 │   │   ├── effectsLayer    # 特效层
 │   │   └── utils           # 方法
 │   │
@@ -28,3 +30,4 @@
 │   ├── utils               # 通用方法
 │   └── types               # 类型
 │
+```

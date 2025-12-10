@@ -23,9 +23,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('global-key-up', (_, ev) => callback(ev))
   },
   
-  getDesktopIcons: (callback)=> {
-      ipcRenderer.on('get-desktop-icons', (_, icons) => callback(icons))
-  },
+  getDesktopIcons: ()=> ipcRenderer.invoke('get-desktop-icons'),
   openDesktopIcon: (name) => {
       ipcRenderer.send('open-desktop-icon', name);
   },

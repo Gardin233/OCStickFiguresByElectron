@@ -1,18 +1,14 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
-
-import { getDesktopIconPosition, openEXE } from './server/utils/desktop.js'
-import { uIOhook } from 'uiohook-napi'
+import { getDesktopIconPosition } from './server/utils/desktop.js'
 import { fileURLToPath } from 'url';
-import path, { dirname, join } from 'path';
+import { dirname, join } from 'path';
 import { convertToLocal } from './server/utils/position.js';
 import { icon } from './types/desktop.js';
-import { ChildProcess, exec, execFile } from 'child_process';
-import { stdout } from 'process';
 import { startGlobalHooks } from './server/hooks/uiohook.js';
-import { setupDesktopHandler } from './server/ipc/desktop.hanlder.js';
+import { setupDesktopHandler } from './server/ipc/desktop.handler.js';
 import { setExeHandler } from './server/ipc/exe.handler.js';
 import { setScreenHandler } from './server/ipc/filter.handler.js';
-let icons:icon[]=[] 
+export let icons:icon[]=[] 
 export let win: BrowserWindow | null = null
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -63,21 +59,21 @@ async function createWindow() {
     win.setIgnoreMouseEvents(true, { forward: true })
   })
   // 启动全局钩子
-   icons =await getDesktopIconPosition()
-    for(const item of icons){
-      item.position =convertToLocal(win,item.position.x,item.position.y)
-    }
-    // console.log(icons)
-   win.webContents.once('did-finish-load', () => {
-  win.webContents.send('get-desktop-icons', icons)
-});
-  
-
+   
+  //  console.log(icons)
+   
   startGlobalHooks()
   setupDesktopHandler()
   setExeHandler()
   setScreenHandler()
-
+    // console.log(icons)
+ipcMain.handle('get-desktop-icons', async () => {
+  icons =await getDesktopIconPosition()
+   for(const item of icons){
+      item.position =convertToLocal(win,item.position.x,item.position.y)
+    }
+  return icons;
+})
 }
 
 
