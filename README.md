@@ -10,19 +10,21 @@
 
 ## 当前的项目结构
 
-
-├── external                  # 操作 WinAPI 的外部程序
-├── src                       # Electron 主程序
-│   ├── client                # 前端用户逻辑
-│   │   ├── character         # 角色相关
-│   │   ├── effectsLayer      # 特效层
-│   │   └── utils             # 工具函数
+```plaintext
+├── external                # 操作 WinAPI 的外部程序
+│
+├── src                     # Electron 程序位置
+│   ├── client              # 用户逻辑存放处
+│   │   ├── character       # 角色
+│   │   ├── effectsLayer    # 特效层
+│   │   └── utils           # 方法
 │   │
-│   ├── server                # 后台服务逻辑
-│   │   ├── hooks             # 各种钩子
-│   │   ├── ipc               # IPC 通信封装
-│   │   ├── process           # 持久化进程
-│   │   └── utils             # 工具函数
+│   ├── server              # 后台逻辑
+│   │   ├── hooks           # 钩子
+│   │   ├── ipc             # 通信监听封装
+│   │   ├── process         # 运行过程中需要持久的程序
+│   │   └── utils           # 方法
 │   │
-│   ├── utils                 # 通用工具
-│   └── types                 # TypeScript 类型定义
+│   ├── utils               # 通用方法
+│   └── types               # 类型
+│
