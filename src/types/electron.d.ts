@@ -1,10 +1,11 @@
-import { icon } from "./desktop.js";
+import { fullScreenFilter, icon } from "./desktop.js";
 
 // electron-api.d.ts
 export {}
 declare global {
   interface Window {
     electronAPI: {
+    changeScreenFilter:(type:fullScreenFilter)=>Promise<any>
     openDesktopIcon: (name: string) => Promise<any>,
     getDesktopIcons:(callback:(icons:icon[])=>void)=>void
     openEXE: (path: string) => Promise<any>;

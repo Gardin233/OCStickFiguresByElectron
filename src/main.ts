@@ -6,8 +6,12 @@ import { fileURLToPath } from 'url';
 import path, { dirname, join } from 'path';
 import { convertToLocal } from './server/utils/position.js';
 import { icon } from './types/desktop.js';
-import { exec, execFile } from 'child_process';
+import { ChildProcess, exec, execFile } from 'child_process';
 import { stdout } from 'process';
+import { startGlobalHooks } from './server/hooks/uiohook.js';
+import { setupDesktopHandler } from './server/ipc/desktop.hanlder.js';
+import { setExeHandler } from './server/ipc/exe.handler.js';
+import { setScreenHandler } from './server/ipc/filter.handler.js';
 let icons:icon[]=[] 
 export let win: BrowserWindow | null = null
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -35,35 +39,7 @@ async function createWindow() {
     }
   })
   console.log(process.versions.node);
-  ipcMain.handle('open-exe', async (event, path: string) => {
-    try {
-      const result = await openEXE(path);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  })
-  ipcMain.on('open-desktop-icon',(event,name)=>{
-    console.log("主进程已接收双击请求")
-    console.log(name)
-    // exe 路径
-    const exePath = path.join(process.cwd(), "external", "openDesktopIcon.exe");
-    // 启动子进程
-    const child = execFile(exePath, (err, stdout, stderr) => {
-    if (err) {
-      console.error("执行失败:", err);
-      return;
-    }
-    if (stdout) console.log("输出:", stdout);
-    if (stderr) console.error("错误输出:", stderr);
-  });  
-  // let fixedName = name.replace(/ - 快捷方式$/, "");
-  console.log(name)
-  child.stdin.setDefaultEncoding('utf16le'); // 关键！
-  child.stdin.write(name + "\n");
 
-    
-  })
     // 打开独立 DevTools 窗口
   win.webContents.openDevTools({ mode: 'detach' })
   win.setAlwaysOnTop(true, "screen-saver")
@@ -75,7 +51,6 @@ async function createWindow() {
   } else {
     win.loadFile(join(app.getAppPath(), 'dist', 'index.html'))
   }
-
   // 开发模式打开 DevTools
   if (process.env.NODE_ENV === 'development') {
     win.webContents.openDevTools({ mode: 'detach' })
@@ -88,7 +63,6 @@ async function createWindow() {
     win.setIgnoreMouseEvents(true, { forward: true })
   })
   // 启动全局钩子
-  uIOhook.start();
    icons =await getDesktopIconPosition()
     for(const item of icons){
       item.position =convertToLocal(win,item.position.x,item.position.y)
@@ -97,24 +71,12 @@ async function createWindow() {
    win.webContents.once('did-finish-load', () => {
   win.webContents.send('get-desktop-icons', icons)
 });
-  // 鼠标移动
-  uIOhook.on('mousemove', event => {
-    const pos = convertToLocal(win, event.x, event.y);
-    win.webContents.send('global-mouse-move', { x: pos.x, y: pos.y });
-  });
-  // 鼠标点击
-  uIOhook.on('mousedown', event => {
-    const pos = convertToLocal(win, event.x, event.y);
-    win.webContents.send('global-mouse-down', { x: pos.x, y: pos.y, button: event.button });
-  });
-  uIOhook.on('mouseup',event=>{
-    const pos =convertToLocal(win,event.x,event.y)
-  })
-  // 键盘按键
-  uIOhook.on('keydown', ev => {
-    win.webContents.send('global-key-down', { keycode: ev.keycode, ctrl: ev.ctrlKey, alt: ev.altKey, shift: ev.shiftKey });
-  });
+  
 
+  startGlobalHooks()
+  setupDesktopHandler()
+  setExeHandler()
+  setScreenHandler()
 
 }
 
@@ -123,7 +85,6 @@ async function createWindow() {
 app.whenReady().then(createWindow).then(() => {
   // openEXE('C:\\Windows\\System32\\notepad.exe')
 //   setInterval(() => {
-
 // }, 16); // 大约每帧发送一次 (60 FPS)
 })
 app.on('window-all-closed', () => {
@@ -133,3 +94,4 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
+

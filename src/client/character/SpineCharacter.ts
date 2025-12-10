@@ -298,7 +298,6 @@ public setPosition(x: number, y: number) {
   if (trackEntry.animation.name === 'open') {
     console.log('动画播放完毕, 执行双击事件')
     window.electronAPI.openDesktopIcon(name)
-
     // 执行完之后立即解绑，避免重复触发
     this.spine.state.removeListener(listener)
   }

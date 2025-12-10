@@ -36,7 +36,6 @@ export async function openEXE(path: string, args: string[] = []) {
  */
 export async function getDesktopIconPosition(): Promise<icon[]> {
   const exePath = resolveExePath();
-
   // 等待 execFile 执行完成
   const stdout: string = await new Promise((resolve, reject) => {
     execFile(exePath, (error, out) => {
@@ -46,17 +45,14 @@ export async function getDesktopIconPosition(): Promise<icon[]> {
   });
 
   // console.log('exe 输出:\n', stdout);
-
   const lines = stdout.trim().split(/\r?\n/);
   const icons: icon[] = [];
-
   for (let i = 1; i < lines.length; i += 3) {
     const [x, y] = lines[i].split(' ').map(Number);
     const name = lines[i + 1];
     const target = lines[i + 2];
     icons.push({ name, position: { x, y }, target });
   }
-
   // console.log('解析后的图标数组:', icons);
   return icons;
 }

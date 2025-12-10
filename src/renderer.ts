@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { SpineCharacter } from './client/character/SpineCharacter.js';
 import type { icon } from './types/desktop.js';
-import { MixedLayer } from './client/effectsLayer/mixedLayer.js';
 let ICONS:icon[] =[]
 // 创建 PixiJS 应用
 export const app = new PIXI.Application({
@@ -36,12 +35,6 @@ async function boot() {
         character.holdHead();
       }
   });
-
-
-
-  //TODO:滤镜
-
-
 window.electronAPI.getDesktopIcons(icons => {
   ICONS=icons
   console.log('图标数据:', icons);
@@ -64,10 +57,11 @@ window.electronAPI.getDesktopIcons(icons => {
   window.electronAPI.onGlobalMouseDown(info => {
     character.getHitBoundingBox(info.x, info.y);
     console.log("closed bb",character.getClosestBoundingBox(info.x, info.y))
-    // character.walk(true)
     console.log('mouse down', info);
   });
-
+  window.electronAPI.onGlobalMouseUp(data=>{
+    console.log(data)
+  })
   window.electronAPI.onGlobalKeyDown(ev => {
     console.log('key down', ev.keycode, ev.ctrl, ev.alt, ev.shift);
     switch(ev.keycode) {
@@ -81,14 +75,17 @@ window.electronAPI.getDesktopIcons(icons => {
         character.jump();
         break;
       case 18: // E:
-        character.openDeskTopIcon(ICONS[0].target);
+        // character.openDeskTopIcon(ICONS[0].target);
         break;
       case 33: // F:
           character.lookAround();
+          window.electronAPI.changeScreenFilter("OPPOSITE")
           break;
     }
   });
-  
+   window.electronAPI.onGlobalKeyUp(ev=>{
+    console.log(ev)
+   })
     
   
   // setInterval(() => {

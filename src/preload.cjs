@@ -28,5 +28,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   openDesktopIcon: (name) => {
       ipcRenderer.send('open-desktop-icon', name);
-    }
+  },
+  changeScreenFilter:(type)=>{
+    ipcRenderer.send('change-screen-filter', type);
+  }
 })
