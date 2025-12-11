@@ -13,6 +13,7 @@
 ```plaintext
 ├── external                # 操作 WinAPI 的外部程序
 ├── externalResource        # 外部程序源码 
+├── story                   # 可编辑脚本存放处  
 │
 ├── src                     # Electron 程序位置
 │   ├── client              # 用户逻辑存放处
