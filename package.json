@@ -4,7 +4,7 @@
     "name": "Gardin",
     "email": "gardin233@gmail.com"
   },
-  "version": "1.0.4-alpha",
+  "version": "1.1.0-alpha",
   "private": true,
   "main": "dist/main.js",
   "type": "module",
@@ -34,6 +34,8 @@
     "app:dist": "electron-builder"
   },
   "dependencies": {
+    "fengari": "^0.1.4",
+    "fengari-interop": "^0.1.3",
     "pixi-spine": "^3.1.2",
     "pixi.js": "^6.5.10",
     "uiohook-napi": "^1.5.4"

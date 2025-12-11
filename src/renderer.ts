@@ -24,10 +24,9 @@ async function boot() {
   // console.log('角色加载完成', character);
   // 事件绑定要在实例创建之后
   if (!window.electronAPI) console.warn('electronAPI 未定义，事件绑定失败');
-
   setInterval(async()=>{
   // 渲染进程
-const icons = await window.electronAPI.getDesktopIcons();
+  const icons = await window.electronAPI.getDesktopIcons();
   console.log('图标数据:', icons);
   ICONS=icons
   //清空标记点
@@ -35,19 +34,19 @@ const icons = await window.electronAPI.getDesktopIcons();
     //@ts-ignore 
     if (child.isIconDot) app.stage.removeChild(child);
   });
-  for (const item of ICONS) {
-    // 创建一个小圆点表示图标
-    const dot = new PIXI.Graphics();
-    dot.beginFill(0xff0000); // 红色
-    dot.drawCircle(0, 0, 5); // 半径 5
-    dot.endFill();
-    //@ts-ignore 
-    dot.isIconDot = true; // 标记方便下次清除
-    dot.x = item.position.x+20;
-    dot.y = item.position.y+15;
-    app.stage.addChild(dot);
+  // for (const item of ICONS) {
+  //   // 创建一个小圆点表示图标
+  //   const dot = new PIXI.Graphics();
+  //   dot.beginFill(0xff0000); // 红色
+  //   dot.drawCircle(0, 0, 5); // 半径 5
+  //   dot.endFill();
+  //   //@ts-ignore 
+  //   dot.isIconDot = true; // 标记方便下次清除
+  //   dot.x = item.position.x+20;
+  //   dot.y = item.position.y+15;
+  //   app.stage.addChild(dot);
     
-  }
+  // }
 },2000)
 
 

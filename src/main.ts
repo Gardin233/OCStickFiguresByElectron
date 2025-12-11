@@ -8,6 +8,8 @@ import { startGlobalHooks } from './server/hooks/uiohook.js';
 import { setupDesktopHandler } from './server/ipc/desktop.handler.js';
 import { setExeHandler } from './server/ipc/exe.handler.js';
 import { setScreenHandler } from './server/ipc/filter.handler.js';
+import { StoryLoader } from './server/StoryLoader/StoryLoader.js';
+
 export let icons:icon[]=[] 
 export let win: BrowserWindow | null = null
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -59,14 +61,15 @@ async function createWindow() {
     win.setIgnoreMouseEvents(true, { forward: true })
   })
   // 启动全局钩子
-   
   //  console.log(icons)
-   
   startGlobalHooks()
   setupDesktopHandler()
   setExeHandler()
   setScreenHandler()
-    // console.log(icons)
+  const story =new StoryLoader()
+  story.Init()
+  story.run()
+  // console.log(icons)
 ipcMain.handle('get-desktop-icons', async () => {
   icons =await getDesktopIconPosition()
    for(const item of icons){
@@ -75,7 +78,6 @@ ipcMain.handle('get-desktop-icons', async () => {
   return icons;
 })
 }
-
 
 // app 生命周期
 app.whenReady().then(createWindow).then(() => {

@@ -36,14 +36,17 @@ export function KeyBoardDownEvent(character:SpineCharacter){
         break;
       case 32: // D:
         character.animator.walk(false);
+        character.mover.moveTo(pos.x+50,pos.y)
         break;
       case 17: // W:
         character.animator.jump();
         character.mover.moveTo(pos.x,pos.y-100)
         break;
+      case 31: //S:
+        break
       case 18: // E:
         console.log(ICONS)
-        character.animator.openDeskTopIcon(ICONS[0].target);
+        // character.animator.openDeskTopIcon(ICONS[0].target);
         break;
       case 33: // F:
           character.animator.lookAround();

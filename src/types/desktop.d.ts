@@ -1,6 +1,7 @@
+export type Position= { x:number,y:number}
 export interface icon{
     name:string
-    position:{x:number,y:number}
+    position:Position
     target:string
 }
 //原版，反色，灰度，高对比
