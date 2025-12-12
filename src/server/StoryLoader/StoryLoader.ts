@@ -22,11 +22,11 @@ export class StoryLoader{
     }
     public Init(){
         this.windowLib.Init()
-        // this.characterLib.Init()
+        this.characterLib.Init()
     }
     // 示例调用
     public run(){
-        const luaFilePath = path.resolve(path.dirname("./"), "./story/test.lua");
+        const luaFilePath = path.resolve(path.dirname("./"), "./story/index.lua");
         // console.log(luaFilePath)
         try {
             //执行 Lua 代码

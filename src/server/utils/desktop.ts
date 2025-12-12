@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url'
 import { app } from 'electron'
 import fs from 'fs'
 import { icon } from '../../types/desktop.js'
-
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -19,7 +18,7 @@ function resolveExePath() {
  * @param path exe 文件路径
  * @param args 可选参数数组
  */
-export async function openEXE(path: string, args: string[] = []) {
+export function openEXE(path: string, args: string[] = []) {
   try {
     const child = spawn(path, args, { detached: true, stdio: 'ignore' })
     child.unref() // 子进程独立于 Electron 主进程

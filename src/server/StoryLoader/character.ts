@@ -3,20 +3,25 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lauxlib, lua } from "./StoryLoader.js";
+import { sendCreateNewSpineMessage } from "../ipc/renderer.send.js";
+import { app } from "electron";
 export class CharacterLib{
-    public libNames:{name:string,function:Function}[]=[]
+    public libNames:{name:string,func:Function}[]=[]
     L: any;
     constructor(L){
         this.L =L
-        // this.libNames = [
-        //     { name: "demofunc", function: this.demofunc.bind(this) }
-        // ];
+        this.libNames = [
+            { name: "demofunc", func: this.demofunc.bind(this) },
+            {name:"createNewCharacter",func:this.createNewCharacterSpine.bind(this)}
+        ];
     }
     public Init(){
-        for(const func of this.libNames){
-            lua.lua_pushcfunction(this.L, this.demofunc); 
-            lua.lua_setglobal(this.L, func.name);
+        lua.lua_newtable(this.L); 
+        for(const item of this.libNames){
+            lua.lua_pushcfunction(this.L, item.func); 
+            lua.lua_setfield(this.L,-2, item.name);
         }
+        lua.lua_setglobal(this.L, "Character"); 
     }
     public demofunc(L){
         // --- 注入环节开始：使用 Lua C-API 方式 ---
@@ -35,5 +40,29 @@ export class CharacterLib{
         // C 函数的职责是返回推入栈的返回值数量
         return 1; 
     };
+    public createNewCharacterSpine(L){
+        const url =interop.tojs(L,1)
+        console.log("来自lua的位置",url)
+        // 主进程提前处理目录，构造 Spine 所需的文件结构
+        const absDir = path.join(app.getAppPath(),"..", url);
+        console.log(absDir)
+    if (!fs.existsSync(absDir)) {
+        throw new Error("目录不存在: " + absDir);
+    }
 
+    const files = fs.readdirSync(absDir);
+    const spineFiles: Record<string, string> = {};
+
+    for (const file of files) {
+        const full = path.join(absDir, file);
+        const ext = path.extname(file).toLowerCase();
+
+        if (ext === ".json") {
+            spineFiles[file] = "file://" + full.replace(/\\/g, "/");
+        }
+    }
+    console.log(spineFiles)
+        sendCreateNewSpineMessage(spineFiles)
+        return 0
+    }
 }

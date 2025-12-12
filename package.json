@@ -4,7 +4,7 @@
     "name": "Gardin",
     "email": "gardin233@gmail.com"
   },
-  "version": "1.1.0-alpha",
+  "version": "1.1.1-alpha",
   "private": true,
   "main": "dist/main.js",
   "type": "module",

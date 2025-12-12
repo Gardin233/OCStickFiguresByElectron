@@ -1,4 +1,4 @@
-//两点距离计算
+//TODO:临时解决方案
 export function pointToSegmentDistance(px: number, py: number,
                                x1: number, y1: number,
                                x2: number, y2: number): number {
