@@ -49,7 +49,6 @@ export class SpineRenderer {
           this.updatePosition()
 
           // 默认播放站立
-          this.spine.state.setAnimation(0, 'stand', true)
           console.log('Spine 加载成功，可用动画：', this.spine.spineData.animations.map(a => a.name))
 
           resolve()
@@ -63,5 +62,14 @@ export class SpineRenderer {
     const { width, height } = app.screen || app.renderer.screen
     this.spine.x = width / 2.5
     this.spine.y = height * 1.01
+  }
+  public destory(){
+      if (this.container?.parent) {
+      this.container.parent.removeChild(this.container)
+    }
+
+    // 2. 销毁 Pixi / Spine 对象
+    this.container?.destroy({ children: true })
+    this.spine?.destroy?.()
   }
 }

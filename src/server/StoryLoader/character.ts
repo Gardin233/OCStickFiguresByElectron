@@ -3,7 +3,7 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lauxlib, lua } from "./StoryLoader.js";
-import { sendCreateNewSpineMessage } from "../ipc/renderer.send.js";
+import { sendCreateNewSpineMessage, sendDeleteSpine } from "../ipc/renderer.send.js";
 import { app } from "electron";
 export class CharacterLib{
     public libNames:{name:string,func:Function}[]=[]
@@ -12,7 +12,8 @@ export class CharacterLib{
         this.L =L
         this.libNames = [
             { name: "demofunc", func: this.demofunc.bind(this) },
-            {name:"createNewCharacter",func:this.createNewCharacterSpine.bind(this)}
+            {name:"createNewCharacter",func:this.createNewCharacterSpine.bind(this)},
+            {name:"deleteCharacter",func:this.delete.bind(this)}
         ];
     }
     public Init(){
@@ -42,6 +43,7 @@ export class CharacterLib{
     };
     public createNewCharacterSpine(L){
         const url =interop.tojs(L,1)
+        const id =interop.tojs(L,2)
         console.log("来自lua的位置",url)
         // 主进程提前处理目录，构造 Spine 所需的文件结构
         const absDir = path.join(app.getAppPath(),"..", url);
@@ -62,7 +64,12 @@ export class CharacterLib{
         }
     }
     console.log(spineFiles)
-        sendCreateNewSpineMessage(spineFiles)
+        sendCreateNewSpineMessage(spineFiles,id)
+        return 0
+    }
+    public delete(L){
+        const id =interop.tojs(L,1)
+        sendDeleteSpine(id)
         return 0
     }
 }

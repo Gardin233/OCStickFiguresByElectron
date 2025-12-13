@@ -9,7 +9,8 @@ declare global {
     openDesktopIcon: (name: string) => Promise<any>,
     getDesktopIcons:()=>Promise<icon[]>
     openEXE: (path: string) => Promise<any>;
-    createNewSpine: (callback: (files:Record<string,string>) => void) => void;
+    createNewSpine: (callback: (files:Record<string,string>,id:string) => void) => void;
+    deleteSpine: (callback: (id:string) => void) => void;
  
     // onGlobalMouseMove: (callback: (pos: { x: number; y: number }) => void) => void;
     // onGlobalMouseDown: (callback: (data: { x: number; y: number; button: number }) => void) => void;
