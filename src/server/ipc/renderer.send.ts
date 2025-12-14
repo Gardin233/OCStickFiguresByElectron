@@ -16,3 +16,19 @@ export function sendDeleteSpine(id:string){
          console.error("主进程发送失败: 窗口不可用。"); // <--- 新增
     }
 }
+//TODO
+export function sendSetPos(id:string,x:number,y:number){
+     win.webContents.send('set-pos',id,x,y)
+}
+export function sendFlip(id:string,isLeft:boolean){
+     win.webContents.send("flip",id,isLeft)
+}
+export function sendPlayAnimation(id:string,layer:string,animation:string,isLoop:string){
+     win.webContents.send("play-animation",id,layer,animation,isLoop)
+}
+export function sendMoveTo(id:string,x:number,y:number,func:string){
+     win.webContents.send("move-to",id,x,y,func)
+}
+export function sendShowHitBox(id:string){
+     win.webContents.send('show-hit-box',id)
+}

@@ -1,3 +1,4 @@
+import { ipcMain } from "electron";
 import { app } from "../../renderer.js";
 import { SpineCharacter } from "../character/SpineCharacter.js"
 
@@ -5,11 +6,13 @@ const characters:Record<string,SpineCharacter>={}
 export class CharacterIPC{
     constructor() {}
     public Init() {
-        this.create()
-        this.delete()
+        this.create();this.delete();
+        this.setAnimation();this.flip()
+        this.setPos();this.moveTo();
+        this.showHitBox()
     }
     private async create(){
-        window.electronAPI.createNewSpine(async (files,id)=>{
+        window.electronAPI.character.createNewSpine(async (files,id)=>{
             // 加载 Spine JSON 资源
         console.log("renderer接收到",files,name)
         const character = new SpineCharacter(app.stage);
@@ -19,7 +22,7 @@ export class CharacterIPC{
         })
     }
     private async delete(){
-     window.electronAPI.deleteSpine((id)=>{
+     window.electronAPI.character.deleteSpine((id)=>{
         const character = characters[id]
         character.renderer.destory()
         delete characters[id]
@@ -27,4 +30,37 @@ export class CharacterIPC{
         return "ok";
      })
     }
+    private async setAnimation(){
+        window.electronAPI.character.playAnimation((id,layer,animation,isLoop)=>{
+            characters[id].animator.play(layer,animation,isLoop)
+        })
+    }
+    private async setPos(){
+        window.electronAPI.character.setPos((id,x,y)=>{
+            characters[id].mover.setPosition(x,y)
+        })
+    }
+    private async moveTo(){
+        window.electronAPI.character.moveTo((id,x,y,func)=>{
+            characters[id].mover.moveTo(x,y)
+        })
+    }
+    private async showHitBox(){
+        window.electronAPI.character.showHitBox((id)=>{
+            setInterval(()=>{
+                  characters[id].hitChecker.debugBoundingBoxes()
+            },16)
+          
+        })
+    }
+    private async flip(){
+        window.electronAPI.character.flip((id,isLeft)=>{
+            characters[id].animator.flip(isLeft)
+        })
+    }
+    // private async getHitBox(){
+    //     ipcMain.handle('get-hit-box',async(event,id)=>{
+    //         const boxes =characters[id].hitChecker.getHitBoundingBox()
+    //     })
+    // }
 }

@@ -52,6 +52,35 @@ export class HitChecker{
       console.log('未命中任何碰撞箱');
       return null;
     }
+    public getBoxs(){
+      const data =[]
+        const skeleton = this.character.renderer.spine.skeleton;
+      skeleton.updateWorldTransform();
+         for (const slot of skeleton.slots) {
+        const attachment = slot.getAttachment();
+        if (!attachment || attachment.type !== AttachmentType.BoundingBox) continue;
+        const bb = attachment as BoundingBoxAttachment;
+        const verts: number[] = new Array(bb.worldVerticesLength);
+        bb.computeWorldVertices(slot, 0, bb.worldVerticesLength, verts, 0, 2);    
+        const scaleX = this.character.renderer.spine.scale.x;
+        const scaleY = this.character.renderer.spine.scale.y;
+    
+        for (let i = 0; i < verts.length; i += 2) {
+          verts[i] = verts[i] * scaleX + this.character.renderer.spine.x;
+          verts[i + 1] = verts[i + 1] * scaleY + this.character.renderer.spine.y;
+        }
+    
+        // 将顶点从 Spine 坐标统一转换为全局坐标
+        for (let i = 0; i < verts.length; i += 2) {
+          const p = this.character.renderer.container.toGlobal(new PIXI.Point(verts[i], verts[i + 1]));
+          // console.log('转换后点:', p);
+          verts[i] = p.x;
+          verts[i + 1] = p.y;
+        }
+      data.push()
+      }
+      return data
+    }
     /**
      * 获取离鼠标最近的碰撞箱名称 + 该碰撞箱的距离
      */

@@ -3,7 +3,7 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lauxlib, lua } from "./StoryLoader.js";
-import { sendCreateNewSpineMessage, sendDeleteSpine } from "../ipc/renderer.send.js";
+import { sendCreateNewSpineMessage, sendDeleteSpine, sendFlip, sendMoveTo, sendPlayAnimation, sendSetPos, sendShowHitBox } from "../ipc/renderer.send.js";
 import { app } from "electron";
 export class CharacterLib{
     public libNames:{name:string,func:Function}[]=[]
@@ -13,7 +13,15 @@ export class CharacterLib{
         this.libNames = [
             { name: "demofunc", func: this.demofunc.bind(this) },
             {name:"createNewCharacter",func:this.createNewCharacterSpine.bind(this)},
-            {name:"deleteCharacter",func:this.delete.bind(this)}
+            {name:"deleteCharacter",func:this.delete.bind(this)},
+            {name:"getHitBox",func:this.getHitBox.bind(this)},
+            {name:"showHitBox",func:this.showHitBox.bind(this)},
+            {name:"checkHit",func:this.checkHit.bind(this)},
+            {name:"getPosToHitBoxInstance",func:this.getPosToHitBoxInstance.bind(this)},
+            {name:"playAnimation",func:this.playAnimation.bind(this)},
+            {name:"setPos",func:this.setPos.bind(this)},
+            {name:"moveTo",func:this.moveTo.bind(this)},
+            {name:"flip",func:this.flip.bind(this)}
         ];
     }
     public Init(){
@@ -24,7 +32,7 @@ export class CharacterLib{
         }
         lua.lua_setglobal(this.L, "Character"); 
     }
-    public demofunc(L){
+    private demofunc(L){
         // --- 注入环节开始：使用 Lua C-API 方式 ---
         // 4. 定义你想注入的 JS 函数 (使用 Lua C API 格式)
         // 注意：这次我们重新引入 interop 的部分功能，但仍然使用 C-style 结构   
@@ -41,7 +49,7 @@ export class CharacterLib{
         // C 函数的职责是返回推入栈的返回值数量
         return 1; 
     };
-    public createNewCharacterSpine(L){
+    private createNewCharacterSpine(L){
         const url =interop.tojs(L,1)
         const id =interop.tojs(L,2)
         console.log("来自lua的位置",url)
@@ -67,9 +75,62 @@ export class CharacterLib{
         sendCreateNewSpineMessage(spineFiles,id)
         return 0
     }
-    public delete(L){
+    private delete(L){
         const id =interop.tojs(L,1)
         sendDeleteSpine(id)
+        return 0
+    }
+    //TODO
+    private getHitBox(L){
+        const id =interop.tojs(L,1)
+        
+        return 0
+    }
+    private showHitBox(L){
+        const id =interop.tojs(L,1)
+        sendShowHitBox(id)
+        return 0
+    }
+    private checkHit(L){
+        const id =interop.tojs(L,1)
+        const x =interop.tojs(L,2)
+        const y =interop.tojs(L,3)
+
+        return 0
+    }
+    private getPosToHitBoxInstance(L){
+        const id =interop.tojs(L,1)
+        return 0
+    }
+    private playAnimation(L){
+        const id =interop.tojs(L,1)
+        const layer=interop.tojs(L,2)
+        const animation =interop.tojs(L,3)
+        const isLoop =interop.tojs(L,4)
+        sendPlayAnimation(id,layer,animation,isLoop)
+        return 0
+    }
+    private setPos(L){
+        const id =interop.tojs(L,1)
+        const x =interop.tojs(L,2)
+        const y =interop.tojs(L,2)
+        sendSetPos(id,x,y)
+
+        return 0
+    }
+    private moveTo(L){
+        const id =interop.tojs(L,1)
+        const x =interop.tojs(L,2)
+        const y =interop.tojs(L,3)
+        const func =interop.tojs(L,4)
+        sendMoveTo(id,x,y,func)
+        return 0
+
+    }
+    private flip(L){
+        const id =interop.tojs(L,1)
+        const isLeft =interop.tojs(L,2)
+        sendFlip(id,isLeft)
         return 0
     }
 }

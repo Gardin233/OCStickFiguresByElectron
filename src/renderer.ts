@@ -16,10 +16,6 @@ async function boot() {
   // 事件绑定要在实例创建之后
   if (!window.electronAPI) console.warn('electronAPI 未定义，事件绑定失败');
   setInterval(async()=>{
-  // 渲染进程
-  const icons = await window.electronAPI.getDesktopIcons();
-  console.log('图标数据:', icons);
-  ICONS=icons
   //清空标记点
   app.stage.children.forEach(child => {
     //@ts-ignore 

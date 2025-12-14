@@ -36,17 +36,18 @@ print("Lua 脚本初始化完成")
 --         end
 --     end
 -- end)
-
+Character.showHitBox("Gardin")
 function Gwin.receiveInput(event)
     if event.type == "move" then
         -- print("鼠标移动到:", event.x, event.y)
     elseif event.type == "click" then
-        Character.createNewCharacter("/assets/spine/","Gardin1")
+        -- Character.createNewCharacter("/assets/spine/","Gardin1")
         print("鼠标点击:", event.button)
+        
     elseif event.type == "down" then
-        Character.deleteCharacter("Gardin1")
         print("按下键盘:", event.keycode)
     elseif event.type == "up" then
+        Character.playAnimation("Gardin",0,"jump",false)
         print("抬起键盘:", event.keycode)
     end
 end

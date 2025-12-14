@@ -1,22 +1,21 @@
-import { fullScreenFilter, icon } from "./desktop.js";
-
 // electron-api.d.ts
 export {}
+
 declare global {
   interface Window {
     electronAPI: {
-    changeScreenFilter:(type:fullScreenFilter)=>Promise<any>
-    openDesktopIcon: (name: string) => Promise<any>,
-    getDesktopIcons:()=>Promise<icon[]>
-    openEXE: (path: string) => Promise<any>;
-    createNewSpine: (callback: (files:Record<string,string>,id:string) => void) => void;
-    deleteSpine: (callback: (id:string) => void) => void;
- 
-    // onGlobalMouseMove: (callback: (pos: { x: number; y: number }) => void) => void;
-    // onGlobalMouseDown: (callback: (data: { x: number; y: number; button: number }) => void) => void;
-    // onGlobalMouseUp: (callback: (data: { x: number; y: number; button: number }) => void) => void;
-    // onGlobalKeyDown: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => void;
-    // onGlobalKeyUp: (callback: (ev: { keycode: number; ctrl: boolean; alt: boolean; shift: boolean }) => void) => void;
+      character: {
+        createNewSpine: (callback: (files: Record<string, string>, id: string) => void) => void
+        deleteSpine: (callback: (id: string) => void) => void
+        getHitBox: (id: string) => Promise<any>
+        showHitBox: (callback:(id: string)=>void) => void
+        checkHit: (id: string, x: number, y: number) => Promise<boolean>
+        getPosToHitboxInstance: (id: string, x: number, y: number) => Promise<{ x: number, y: number }>
+        playAnimation: (callback:(id: string, layer: number, animation: string, isloop: boolean)=>void) => void
+        setPos: (callback:(id: string, x: number, y: number)=>void) => void
+        moveTo: (callback:(id: string, x: number, y: number, func?: string)=>void) => void
+        flip: (callback:(id: string, isLeft: boolean)=>void) => void
+      }
+    }
   }
-}
 }

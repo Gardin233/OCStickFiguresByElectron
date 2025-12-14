@@ -8,7 +8,7 @@ import { getDesktopIconPosition, openEXE } from "../utils/desktop.js";
 import { getOrCreateDeskTopOpnerProcess } from "../process/exeOpner.js";
 import { useExternalforSingle } from "../process/Input.js";
 
-import { getDesktopIconPosAsync } from "../Async/getDesktopIconPosAsync.js";
+import { getDesktopIconPosAsync } from "../Async/Desktop.js";
 
 /**
  * @class WindowLib Win系统库。用于操纵window系统的交互
