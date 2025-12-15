@@ -3,7 +3,7 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lauxlib, lua } from "./StoryLoader.js";
-import { sendCreateNewSpineMessage, sendDeleteSpine, sendFlip, sendMoveTo, sendPlayAnimation, sendSetPos, sendShowHitBox } from "../ipc/renderer.send.js";
+import { sendCreateNewSpineMessage, sendDeleteSpine, sendFlip, sendGetHitBox, sendMoveTo, sendPlayAnimation, sendSetPos, sendShowHitBox } from "../ipc/renderer.send.js";
 import { app } from "electron";
 export class CharacterLib{
     public libNames:{name:string,func:Function}[]=[]
@@ -83,7 +83,9 @@ export class CharacterLib{
     //TODO
     private getHitBox(L){
         const id =interop.tojs(L,1)
-        
+        console.log("开始获取碰撞箱信息")
+        const hitboxs= sendGetHitBox(id)
+        console.log(hitboxs)
         return 0
     }
     private showHitBox(L){
@@ -95,7 +97,7 @@ export class CharacterLib{
         const id =interop.tojs(L,1)
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,3)
-
+        
         return 0
     }
     private getPosToHitBoxInstance(L){
@@ -103,6 +105,7 @@ export class CharacterLib{
         return 0
     }
     private playAnimation(L){
+        console.log("动画播放函数已经被触发")
         const id =interop.tojs(L,1)
         const layer=interop.tojs(L,2)
         const animation =interop.tojs(L,3)
@@ -111,6 +114,7 @@ export class CharacterLib{
         return 0
     }
     private setPos(L){
+        console.log("设置坐标函数已经被触发")
         const id =interop.tojs(L,1)
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,2)
@@ -119,6 +123,7 @@ export class CharacterLib{
         return 0
     }
     private moveTo(L){
+        console.log("移动函数已经被触发")
         const id =interop.tojs(L,1)
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,3)
@@ -128,6 +133,7 @@ export class CharacterLib{
 
     }
     private flip(L){
+        console.log("反转函数已经被触发")
         const id =interop.tojs(L,1)
         const isLeft =interop.tojs(L,2)
         sendFlip(id,isLeft)

@@ -17,7 +17,6 @@ export class SpineCharacter {
     await this.renderer.loadFromGlob(globPattern)
     this.animator.setSpine(this.renderer.spine)
     this.mover = new Mover(this.renderer.spine)
-    
     this.hitChecker = new HitChecker(this)
   }
 }

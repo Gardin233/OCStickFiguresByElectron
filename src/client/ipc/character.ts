@@ -1,4 +1,3 @@
-import { ipcMain } from "electron";
 import { app } from "../../renderer.js";
 import { SpineCharacter } from "../character/SpineCharacter.js"
 
@@ -9,12 +8,14 @@ export class CharacterIPC{
         this.create();this.delete();
         this.setAnimation();this.flip()
         this.setPos();this.moveTo();
-        this.showHitBox()
+        this.showHitBox();this.getHitBox()
+        this.getPosToHitBoxInstance();this.checkHit();
     }
     private async create(){
+
         window.electronAPI.character.createNewSpine(async (files,id)=>{
             // 加载 Spine JSON 资源
-        console.log("renderer接收到",files,name)
+        // console.log("renderer接收到",files,id)
         const character = new SpineCharacter(app.stage);
         await character.load(files);
         characters[id]=character
@@ -58,9 +59,27 @@ export class CharacterIPC{
             characters[id].animator.flip(isLeft)
         })
     }
-    // private async getHitBox(){
-    //     ipcMain.handle('get-hit-box',async(event,id)=>{
-    //         const boxes =characters[id].hitChecker.getHitBoundingBox()
-    //     })
-    // }
+
+    //TODO
+    private getHitBox(){
+        window.electronAPI.character.getHitBox((id)=>{
+            const boxes =characters[id].hitChecker.getBoxs()
+            console.log(boxes)
+            window.electronAPI.character.sendGetHitBox(boxes)
+            
+        })
+    }
+    private getPosToHitBoxInstance(){
+        
+        window.electronAPI.character.getPosToHitboxInstance((id,x,y)=>{
+          const data =characters[id].hitChecker.getBoundingBoxInstance(x,y)  
+          window.electronAPI.character.sendGetPosToHitBoxInstance(data)
+        })
+    }
+    private checkHit(){
+        window.electronAPI.character.checkHit((id,x,y)=>{
+            const data =characters[id].hitChecker.getHitBoundingBox(x,y)
+            window.electronAPI.character.sendCheckHit(data)
+        })
+    } 
 }

@@ -11,7 +11,7 @@ import { lua, StoryLoader } from './server/StoryLoader/StoryLoader.js';
 
 export let SYS_ICONS:icon[]=[] 
 export let win: BrowserWindow | null = null
-export const __dirname = dirname(fileURLToPath(import.meta.url));
+export const Wdirname = dirname(fileURLToPath(import.meta.url));
 async function Start() {
   win =await createWindow()
  

@@ -11,10 +11,8 @@ export function getDesktopIconPosAsync(L: fengari.lua_State): number {
     if (lua.lua_isfunction(L, 1) === 0) {
         return lauxlib.luaL_error(L, "getDesktopIconPos() 需要一个回调函数作为参数");
     }
-
     lua.lua_pushvalue(L, 1);
     const callback_ref = lauxlib.luaL_ref(L, lua.LUA_REGISTRYINDEX);
-
     (async () => {
         try {
             const icons = await getDesktopIconPosition();
@@ -37,6 +35,5 @@ export function getDesktopIconPosAsync(L: fengari.lua_State): number {
             }, 0);
         }
     })();
-
     return 0;
 }

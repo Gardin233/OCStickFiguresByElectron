@@ -131,7 +131,51 @@ export class HitChecker{
       }
       return { name: closestName, distance: minDist };
     }
+    //获取所有碰撞箱距离指定坐标的距离
+    public getBoundingBoxInstance(globalX: number, globalY: number): {name: string | null,distance: number} []{
+      if (!this.character.renderer.spine) return [{ name: null, distance: Infinity }];
     
+      const skeleton = this.character.renderer.spine.skeleton;
+      skeleton.updateWorldTransform();
+    
+      let closestName: string | null = null;
+    
+      const data:{ name: string, distance: number}[] =[]
+      for (const slot of skeleton.slots) {
+        const attachment = slot.getAttachment();
+        if (!attachment || attachment.type !== AttachmentType.BoundingBox) continue;
+    
+        const bb = attachment as BoundingBoxAttachment;
+        const verts: number[] = new Array(bb.worldVerticesLength);
+        bb.computeWorldVertices(slot, 0, bb.worldVerticesLength, verts, 0, 2);
+    
+        // 局部坐标→全局坐标
+        const worldVerts: number[] = []
+        for (let i = 0; i < verts.length; i += 2) {
+          const p = this.character.renderer.spine.toGlobal(new PIXI.Point(verts[i], verts[i + 1]));
+          worldVerts.push(p.x, p.y);
+        }
+        let finalDistance = Infinity;
+        // 如果点在多边形内 → 为0，直接返回最近
+        if (this.pointInPolygon(globalX, globalY, worldVerts)) {
+           finalDistance = 0;
+        }
+    
+        // 点到多边形每条边求最小距离
+        let dist = Infinity;
+        for (let i = 0; i < worldVerts.length; i += 2) {
+          const x1 = worldVerts[i];
+          const y1 = worldVerts[i + 1];
+          const j = (i + 2) % worldVerts.length;
+          const x2 = worldVerts[j];
+          const y2 = worldVerts[j + 1];
+          const d = pointToSegmentDistance(globalX, globalY, x1, y1, x2, y2);
+          if (d < dist) dist = d;
+        }
+        data.push({name:slot.data.name,distance:finalDistance}) 
+      }
+      return data
+    }
     /**
      * 显示 Spine 碰撞箱的真实范围
      * 每帧调用以跟随动画实时更新

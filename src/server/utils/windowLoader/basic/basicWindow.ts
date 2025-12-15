@@ -1,6 +1,6 @@
 import { BrowserWindow,screen } from "electron";
 import { join } from "path";
-import { __dirname } from "../../../../main.js";
+import { Wdirname } from "../../../../main.js";
 import { ServerIpcInit } from "../../../ipc/index.js";
 export async function createWindow() {
   //创建窗体
@@ -22,12 +22,10 @@ export async function createWindow() {
       // sandbox: true,
       webSecurity: false,           // 关闭 web 安全（允许跨域、file:// 加载）
       nodeIntegration: false,
-      preload: join(__dirname,'preload.cjs') 
+      preload: join(Wdirname,'preload.cjs') 
     }
   })
 win.webContents.session.setPermissionCheckHandler(() => true);
-
-// 彻底干掉 CSP（推荐！）
 win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
   callback({
     responseHeaders: {

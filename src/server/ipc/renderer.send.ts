@@ -32,3 +32,6 @@ export function sendMoveTo(id:string,x:number,y:number,func:string){
 export function sendShowHitBox(id:string){
      win.webContents.send('show-hit-box',id)
 }
+export async function  sendGetHitBox(id:string){
+     win.webContents.send('get-hit-box',id)
+}

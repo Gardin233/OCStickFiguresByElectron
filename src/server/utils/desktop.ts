@@ -4,8 +4,6 @@ import { fileURLToPath } from 'url'
 import { app } from 'electron'
 import fs from 'fs'
 import { icon } from '../../types/desktop.js'
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 function resolveExePath() {
   return app.isPackaged

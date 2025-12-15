@@ -5,18 +5,18 @@ print("当前 package.path: ", package.path)
 
 
 ---@class Gwin 
-print(type(_G.Gwin))
 local Gwin = _G.Gwin
 ---@class Character
 local Character =_G.Character
 print("Lua: 脚本开始运行...")
 
--- Gwin.applyScreenFilter("HIGHCONTRAST")
+-- Gwin.applyScreenFilter("OPPOSITE")
 -- GWin.openExe("C:\\Windows\\System32\\notepad.exe")
 -- local a=GWin.getDesktopIconPos()
 --     print(a)
 Character.createNewCharacter("/assets/spine/","Gardin")
 --回调函数
+
 
 print("Lua 脚本初始化完成")
 
@@ -36,14 +36,17 @@ print("Lua 脚本初始化完成")
 --         end
 --     end
 -- end)
-Character.showHitBox("Gardin")
+-- Character.showHitBox("Gardin")
+-- Character.getHitBox("Gardin")
 function Gwin.receiveInput(event)
     if event.type == "move" then
         -- print("鼠标移动到:", event.x, event.y)
     elseif event.type == "click" then
         -- Character.createNewCharacter("/assets/spine/","Gardin1")
         print("鼠标点击:", event.button)
-        
+        Character.flip("Gardin",false)
+        Character.setPos("Gardin",10,20)
+        -- Character.moveTo("Gardin",120,121,'line')
     elseif event.type == "down" then
         print("按下键盘:", event.keycode)
     elseif event.type == "up" then
