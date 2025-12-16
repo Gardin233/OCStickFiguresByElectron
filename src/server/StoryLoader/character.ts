@@ -3,21 +3,22 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lauxlib, lua } from "./StoryLoader.js";
-import { sendCreateNewSpineMessage, sendDeleteSpine, sendFlip, sendGetHitBox, sendMoveTo, sendPlayAnimation, sendSetPos, sendShowHitBox } from "../ipc/renderer.send.js";
+import { sendCreateNewSpineMessage, sendDeleteSpine, sendFlip, sendMoveTo, sendPlayAnimation, sendSetPos, sendShowHitBox } from "../ipc/renderer.send.js";
 import { app } from "electron";
+import { getcheckHitAsync, getHitBoxAsync, getPosToHitBoxDistanceAsync} from "../Async/Character.js";
 export class CharacterLib{
-    public libNames:{name:string,func:Function}[]=[]
+    private libNames:{name:string,func:Function}[]=[]
     L: any;
     constructor(L){
         this.L =L
         this.libNames = [
-            { name: "demofunc", func: this.demofunc.bind(this) },
+            {name:"demofunc", func: this.demofunc.bind(this) },
             {name:"createNewCharacter",func:this.createNewCharacterSpine.bind(this)},
             {name:"deleteCharacter",func:this.delete.bind(this)},
             {name:"getHitBox",func:this.getHitBox.bind(this)},
             {name:"showHitBox",func:this.showHitBox.bind(this)},
             {name:"checkHit",func:this.checkHit.bind(this)},
-            {name:"getPosToHitBoxInstance",func:this.getPosToHitBoxInstance.bind(this)},
+            {name:"getPosToHitBoxDistance",func:this.getPosToHitBoxDistance.bind(this)},
             {name:"playAnimation",func:this.playAnimation.bind(this)},
             {name:"setPos",func:this.setPos.bind(this)},
             {name:"moveTo",func:this.moveTo.bind(this)},
@@ -82,11 +83,7 @@ export class CharacterLib{
     }
     //TODO
     private getHitBox(L){
-        const id =interop.tojs(L,1)
-        console.log("开始获取碰撞箱信息")
-        const hitboxs= sendGetHitBox(id)
-        console.log(hitboxs)
-        return 0
+        return getHitBoxAsync(L)
     }
     private showHitBox(L){
         const id =interop.tojs(L,1)
@@ -94,15 +91,11 @@ export class CharacterLib{
         return 0
     }
     private checkHit(L){
-        const id =interop.tojs(L,1)
-        const x =interop.tojs(L,2)
-        const y =interop.tojs(L,3)
-        
-        return 0
+        return getcheckHitAsync(L)
     }
-    private getPosToHitBoxInstance(L){
-        const id =interop.tojs(L,1)
-        return 0
+    private getPosToHitBoxDistance(L){
+        // console.log("fuck")
+        return getPosToHitBoxDistanceAsync(L)
     }
     private playAnimation(L){
         console.log("动画播放函数已经被触发")
@@ -119,11 +112,10 @@ export class CharacterLib{
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,2)
         sendSetPos(id,x,y)
-
         return 0
     }
     private moveTo(L){
-        console.log("移动函数已经被触发")
+        // console.log("移动函数已经被触发")
         const id =interop.tojs(L,1)
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,3)
@@ -133,7 +125,7 @@ export class CharacterLib{
 
     }
     private flip(L){
-        console.log("反转函数已经被触发")
+        // console.log("反转函数已经被触发")
         const id =interop.tojs(L,1)
         const isLeft =interop.tojs(L,2)
         sendFlip(id,isLeft)

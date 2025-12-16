@@ -9,7 +9,7 @@ export function convertToLocal(win:BrowserWindow, globalX:number, globalY:number
     y: (globalY - winY) / scale
   };
 }
-//取真实坐标
+//获取web坐标
 export function localToConvert(win:BrowserWindow,screenX:number,screenY:number){
   const [winX, winY] = win.getPosition();
   const scale = win.webContents.getZoomFactor() * screen.getPrimaryDisplay().scaleFactor;

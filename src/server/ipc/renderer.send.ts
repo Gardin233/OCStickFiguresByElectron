@@ -32,6 +32,13 @@ export function sendMoveTo(id:string,x:number,y:number,func:string){
 export function sendShowHitBox(id:string){
      win.webContents.send('show-hit-box',id)
 }
-export async function  sendGetHitBox(id:string){
+export async function sendGetHitBox(id:string){
      win.webContents.send('get-hit-box',id)
+}
+export async function sendGetcheckHit(id:string,x:number,y:number) {
+     win.webContents.send('check-hit-box',id,x,y)
+}
+export async function sendGetPosToHitBoxDistance(id:string,x:number,y:number) {
+    console.log("发送距离请求")
+     win.webContents.send("get-pos-to-hit-box-distance",id,x,y)
 }

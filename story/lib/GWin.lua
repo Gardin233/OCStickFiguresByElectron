@@ -1,5 +1,16 @@
 ---@meta
 ---@class Gwin
+---@field receiveInput fun(event: {
+---   type: "move"|"click"|"down"|"up",
+---   x: number,
+---   y: number,
+---   button: number?,
+---   keycode: number?,
+---   clicks: number?,
+---   altKey: boolean?,
+---   ctrlKey: boolean?,
+---   shiftKey: boolean?,
+---   metaKey: boolean? })
 local Gwin = {}
 
 ---@param t "IDLE"|"OPPOSITE"|"GRAYSCALE"|"HIGHCONTRAST"
@@ -15,6 +26,6 @@ function Gwin.openExe(src)end
 ---comment
 ---@param callback fun(err:any, icons: {name:string, position:{x:number, y:number}, target:string}[])
 function Gwin.getDesktopIconPos(callback)end
-
+---comment
 
 return Gwin

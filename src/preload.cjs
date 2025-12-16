@@ -15,25 +15,23 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getHitBox:(callback)=>{
   ipcRenderer.on('get-hit-box',(_,id)=>callback(id))
   },
-  sendGetHitBox:(data)=>{
-    ipcRenderer.send('send-get-hit-box',data)
+  sendGetHitBox:(id,data)=>{
+    ipcRenderer.send('send-get-hit-box',id,data)
   },
-  showHitBox:(callback)=>{
-    ipcRenderer.on('show-hit-box',(_,id)=>callback(id))
-  },
+  showHitBox:(callback)=>{ipcRenderer.on('show-hit-box',(_,id)=>callback(id))},
   //
   checkHit:(callback)=>{
      ipcRenderer.on('check-hit-box',(_,id,x,y)=>callback(id,x,y))
   },
-  sendCheckHit:(data)=>{
-    ipcRenderer.on('send-check-hit',data)
+  sendCheckHit:(id,data)=>{
+    ipcRenderer.send('send-check-hit',id,data)
   },
   //
-  getPosToHitboxInstance:(callback)=>{
-     ipcRenderer.on('get-pos-to-hit-box-instance',(_,id,x,y)=>callback(id,x,y))
+  getPosToHitboxDistance:(callback)=>{
+     ipcRenderer.on('get-pos-to-hit-box-distance',(_,id,x,y)=>callback(id,x,y))
   },
-  sendGetPosToHitBoxInstance:(data)=>{
-    ipcRenderer.on('send-get-pos-to-hit-box-instance',data)
+  sendGetPosToHitBoxDistance:(id,data)=>{
+    ipcRenderer.send('send-get-pos-to-hit-box-distance',id,data)
   },
 
   playAnimation:(callback)=>{
@@ -42,11 +40,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setPos:(callback)=>{
     ipcRenderer.on('set-pos',(_,id,x,y)=>callback(id,x,y))
   },
-  moveTo:(id,x,y,func)=>{
-    ipcRenderer.on('move-to',id,x,y,func)
+  moveTo:(callback)=>{
+    ipcRenderer.on('move-to',(_,id,x,y,func)=>callback(id,x,y,func))
   },
-  flip:(id,isLeft)=>{
-    ipcRenderer.on('flip',id,isLeft)
+  flip:(callback)=>{
+    ipcRenderer.on('flip',(_,id,isLeft)=>callback(id,isLeft))
   }
   }
   

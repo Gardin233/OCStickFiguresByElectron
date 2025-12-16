@@ -77,7 +77,7 @@ export class HitChecker{
           verts[i] = p.x;
           verts[i + 1] = p.y;
         }
-      data.push()
+      data.push({name:slot.data.name,verts:verts})
       }
       return data
     }
@@ -132,7 +132,7 @@ export class HitChecker{
       return { name: closestName, distance: minDist };
     }
     //获取所有碰撞箱距离指定坐标的距离
-    public getBoundingBoxInstance(globalX: number, globalY: number): {name: string | null,distance: number} []{
+    public getBoundingBoxDistance(globalX: number, globalY: number): {name: string | null,distance: number} []{
       if (!this.character.renderer.spine) return [{ name: null, distance: Infinity }];
     
       const skeleton = this.character.renderer.spine.skeleton;
@@ -155,14 +155,14 @@ export class HitChecker{
           const p = this.character.renderer.spine.toGlobal(new PIXI.Point(verts[i], verts[i + 1]));
           worldVerts.push(p.x, p.y);
         }
-        let finalDistance = Infinity;
+        let dist = Infinity;
         // 如果点在多边形内 → 为0，直接返回最近
         if (this.pointInPolygon(globalX, globalY, worldVerts)) {
-           finalDistance = 0;
+           dist = 0;
         }
     
         // 点到多边形每条边求最小距离
-        let dist = Infinity;
+        
         for (let i = 0; i < worldVerts.length; i += 2) {
           const x1 = worldVerts[i];
           const y1 = worldVerts[i + 1];
@@ -172,7 +172,7 @@ export class HitChecker{
           const d = pointToSegmentDistance(globalX, globalY, x1, y1, x2, y2);
           if (d < dist) dist = d;
         }
-        data.push({name:slot.data.name,distance:finalDistance}) 
+        data.push({name:slot.data.name,distance:dist}) 
       }
       return data
     }
