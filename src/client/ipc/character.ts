@@ -1,5 +1,5 @@
 import { app } from "../../renderer.js";
-import { SpineCharacter } from "../character/SpineCharacter.js"
+import { SpineCharacter } from "../system/character/SpineCharacter.js"
 
 const characters:Record<string,SpineCharacter>={}
 export class CharacterIPC{
@@ -11,7 +11,7 @@ export class CharacterIPC{
         this.showHitBox();this.getHitBox()
         this.getPosToHitBoxDistance();this.checkHit();
     }
-    private  async create(){
+    private async create(){
         window.electronAPI.character.createNewSpine(async (files,id)=>{
             const character = new SpineCharacter(app.stage);
             await character.load(files);

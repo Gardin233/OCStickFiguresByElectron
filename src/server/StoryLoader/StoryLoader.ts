@@ -14,10 +14,12 @@ export class StoryLoader{
     private L = lauxlib.luaL_newstate();
     private characterLib:CharacterLib
     private windowLib:WindowLib
+    private
     private inputMgr:InputManager
     constructor(){
     this.windowLib=new WindowLib(this.L)
     this.characterLib=new CharacterLib(this.L)
+    
         //打开 Lua 标准库 (print, math, string 等) 
         //启用 JS 互操作库 (关键步骤) 这让 Lua 可以理解 JS 的对象和函数
         lualib.luaL_openlibs(this.L);

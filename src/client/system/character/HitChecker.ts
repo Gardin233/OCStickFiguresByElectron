@@ -2,7 +2,7 @@ import * as PIXI  from 'pixi.js'
 import { SpineCharacter } from "./SpineCharacter.js";
 import { AttachmentType } from 'pixi-spine';
 import { BoundingBoxAttachment, Spine } from '@pixi-spine/runtime-3.8'
-import { pointToSegmentDistance } from '../utils/pos.js'
+import { pointToSegmentDistance } from '../../utils/pos.js'
 
 /**
  * @description 

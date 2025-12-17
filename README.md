@@ -1,6 +1,7 @@
 # OCStickFiguresEngine
 
 基于 Electron + TypeScript + Vite + PixiJSv6 + pixi-spine ，需要Spine 3.8 model
+[官方文档（开发中纯占位ing）](https://gardin233.github.io/SFBE-docs/)
 
 ## 为什么我要做这个？
 

@@ -1,51 +1,53 @@
 const { contextBridge, ipcRenderer } = require('electron')
-/**
- * @param path {string} exe path
- */
+
 contextBridge.exposeInMainWorld('electronAPI', {
   character:{
-    //TODO:
-  createNewSpine:(callback)=>{
-    ipcRenderer.on("create-new-spine",(_,files,id)=>callback(files,id))
+    //创建与删除角色
+    createNewSpine:(callback)=>{ipcRenderer.on("create-new-spine",(_,files,id)=>callback(files,id))},
+    deleteSpine:(callback)=>{ipcRenderer.on("delete-spine",(_,id)=>callback(id))},
+    //获取碰撞箱
+    getHitBox:(callback)=>{ipcRenderer.on('get-hit-box',(_,id)=>callback(id))},
+    sendGetHitBox:(id,data)=>{ipcRenderer.send('send-get-hit-box',id,data)},
+    //显示碰撞箱
+    showHitBox:(callback)=>{ipcRenderer.on('show-hit-box',(_,id)=>callback(id))},
+    //检查点击碰撞
+    checkHit:(callback)=>{ipcRenderer.on('check-hit-box',(_,id,x,y)=>callback(id,x,y))},
+    sendCheckHit:(id,data)=>{ipcRenderer.send('send-check-hit',id,data)},
+    //获取点到碰撞箱距离
+    getPosToHitboxDistance:(callback)=>{ipcRenderer.on('get-pos-to-hit-box-distance',(_,id,x,y)=>callback(id,x,y))},
+    sendGetPosToHitBoxDistance:(id,data)=>{ipcRenderer.send('send-get-pos-to-hit-box-distance',id,data)},
+    //播放动画
+    playAnimation:(callback)=>{ipcRenderer.on('play-animation',(_,id,layer,animation,isloop)=>callback(id,layer,animation,isloop))},
+    //设置坐标点
+    setPos:(callback)=>{ipcRenderer.on('set-pos',(_,id,x,y)=>callback(id,x,y))},
+    //移动
+    moveTo:(callback)=>{ipcRenderer.on('move-to',(_,id,x,y,func)=>callback(id,x,y,func))},
+    //翻转
+    flip:(callback)=>{ipcRenderer.on('flip',(_,id,isLeft)=>callback(id,isLeft))}
   },
-  deleteSpine:(callback)=>{
-    ipcRenderer.on("delete-spine",(_,id)=>callback(id))
-  },
-  //
-  getHitBox:(callback)=>{
-  ipcRenderer.on('get-hit-box',(_,id)=>callback(id))
-  },
-  sendGetHitBox:(id,data)=>{
-    ipcRenderer.send('send-get-hit-box',id,data)
-  },
-  showHitBox:(callback)=>{ipcRenderer.on('show-hit-box',(_,id)=>callback(id))},
-  //
-  checkHit:(callback)=>{
-     ipcRenderer.on('check-hit-box',(_,id,x,y)=>callback(id,x,y))
-  },
-  sendCheckHit:(id,data)=>{
-    ipcRenderer.send('send-check-hit',id,data)
-  },
-  //
-  getPosToHitboxDistance:(callback)=>{
-     ipcRenderer.on('get-pos-to-hit-box-distance',(_,id,x,y)=>callback(id,x,y))
-  },
-  sendGetPosToHitBoxDistance:(id,data)=>{
-    ipcRenderer.send('send-get-pos-to-hit-box-distance',id,data)
-  },
-
-  playAnimation:(callback)=>{
-    ipcRenderer.on('play-animation',(_,id,layer,animation,isloop)=>callback(id,layer,animation,isloop))
-  },
-  setPos:(callback)=>{
-    ipcRenderer.on('set-pos',(_,id,x,y)=>callback(id,x,y))
-  },
-  moveTo:(callback)=>{
-    ipcRenderer.on('move-to',(_,id,x,y,func)=>callback(id,x,y,func))
-  },
-  flip:(callback)=>{
-    ipcRenderer.on('flip',(_,id,isLeft)=>callback(id,isLeft))
+  //TODO：加载音频文件--压入混合层--随时可启用播放或禁用
+  audio:{
+    //注册音频文件
+    loadBGMFiles:(callback)=>{ipcRenderer.on("load-bgm-files",(_,BGMs)=>callback(BGMs))},
+    loadSFXFiles:(callback)=>{ipcRenderer.on("load-sfx-files",(_,SFXs)=>callback(SFXs))},
+    //删除注册
+    unloadBGM:(callback)=>{ipcRenderer.on("unload-bgm",(_,id)=>callback(id))},
+    unloadSFX:(callback)=>{ipcRenderer.on("unload-sfx",(_,id)=>callback(id))}, 
+    //预载
+    preloadBGM:(callback)=>{ipcRenderer.on("preload-bgm",(_,id)=>callback(id))},
+    preloadSFX:(callback)=>{ipcRenderer.on("preload-sfx",(_,id)=>callback(id))},
+    //卸载
+    releaseBGM:(callback)=>{ipcRenderer.on("release-bgm",(_,id)=>callback(id))},
+    releaseSFX:(callback)=>{ipcRenderer.on("release-sfx",(_,id)=>callback(id))},
+    //压入混合层
+    addBGM:(callback)=>{ipcRenderer.on("add-bgm",(_,id)=>callback(id))},
+    addSFX:(callback)=>{ipcRenderer.on("add-sfx",(_,id)=>callback(id))},
+    //启用播放
+    playBGM:(callback)=>{ipcRenderer.on("play-bgm",(_,id,data)=>callback(id,data))},
+    playSFX:(callback)=>{ipcRenderer.on("play-sfx",(_,id,data)=>callback(id,data))},
+    //移出混合层
+    removeBGM:(callback)=>{ipcRenderer.on("stop-bgm",(_,id)=>callback(id))},
+    removeSFX:(callback)=>{ipcRenderer.on("stop-sfx",(_,id)=>callback(id))},
+    
   }
-  }
-  
 })

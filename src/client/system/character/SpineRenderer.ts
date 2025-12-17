@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { Spine } from '@pixi-spine/runtime-3.8'
-import { app } from '../../renderer.js'
+import { app } from '../../../renderer.js'
 
 const MODEL_SCALE = 0.2
 
