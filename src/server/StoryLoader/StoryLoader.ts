@@ -5,6 +5,7 @@ import * as interop from 'fengari-interop'
 import { WindowLib } from "./WindowLib.js";
 import { CharacterLib } from "./Character.js";
 import { InputManager } from "./listener/uiohook.js";
+import { AudioLib } from "./AudioLib.js";
 
 
 export const lua = fengari.lua;
@@ -14,12 +15,13 @@ export class StoryLoader{
     private L = lauxlib.luaL_newstate();
     private characterLib:CharacterLib
     private windowLib:WindowLib
-    private
+    private audioLib:AudioLib
     private inputMgr:InputManager
     constructor(){
-    this.windowLib=new WindowLib(this.L)
-    this.characterLib=new CharacterLib(this.L)
-    
+        this.windowLib=new WindowLib(this.L)
+        this.characterLib=new CharacterLib(this.L)
+        this.audioLib= new AudioLib(this.L)
+        this.inputMgr = new InputManager(this.L);
         //打开 Lua 标准库 (print, math, string 等) 
         //启用 JS 互操作库 (关键步骤) 这让 Lua 可以理解 JS 的对象和函数
         lualib.luaL_openlibs(this.L);
@@ -29,9 +31,9 @@ export class StoryLoader{
     public Init(){
         this.windowLib.Init()
         this.characterLib.Init()
-
+        this.audioLib.Init()
         // 初始化 InputManager
-        this.inputMgr = new InputManager(this.L);
+        
         this.inputMgr.start();
     }
     // 示例调用

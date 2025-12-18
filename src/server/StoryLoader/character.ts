@@ -3,7 +3,7 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lauxlib, lua } from "./StoryLoader.js";
-import { sendCreateNewSpineMessage, sendDeleteSpine, sendFlip, sendMoveTo, sendPlayAnimation, sendSetPos, sendShowHitBox } from "../ipc/renderer.send.js";
+import { CharacterIPCSender} from "../ipc/character.js";
 import { app } from "electron";
 import { getcheckHitAsync, getHitBoxAsync, getPosToHitBoxDistanceAsync} from "../Async/Character.js";
 export class CharacterLib{
@@ -73,12 +73,12 @@ export class CharacterLib{
         }
     }
     console.log(spineFiles)
-        sendCreateNewSpineMessage(spineFiles,id)
+        CharacterIPCSender.sendCreateNewSpineMessage(spineFiles,id)
         return 0
     }
     private delete(L){
         const id =interop.tojs(L,1)
-        sendDeleteSpine(id)
+        CharacterIPCSender.sendDeleteSpine(id)
         return 0
     }
     //TODO
@@ -87,7 +87,7 @@ export class CharacterLib{
     }
     private showHitBox(L){
         const id =interop.tojs(L,1)
-        sendShowHitBox(id)
+        CharacterIPCSender.sendShowHitBox(id)
         return 0
     }
     private checkHit(L){
@@ -103,7 +103,7 @@ export class CharacterLib{
         const layer=interop.tojs(L,2)
         const animation =interop.tojs(L,3)
         const isLoop =interop.tojs(L,4)
-        sendPlayAnimation(id,layer,animation,isLoop)
+        CharacterIPCSender.sendPlayAnimation(id,layer,animation,isLoop)
         return 0
     }
     private setPos(L){
@@ -111,7 +111,7 @@ export class CharacterLib{
         const id =interop.tojs(L,1)
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,2)
-        sendSetPos(id,x,y)
+        CharacterIPCSender.sendSetPos(id,x,y)
         return 0
     }
     private moveTo(L){
@@ -120,7 +120,7 @@ export class CharacterLib{
         const x =interop.tojs(L,2)
         const y =interop.tojs(L,3)
         const func =interop.tojs(L,4)
-        sendMoveTo(id,x,y,func)
+        CharacterIPCSender.sendMoveTo(id,x,y,func)
         return 0
 
     }
@@ -128,7 +128,7 @@ export class CharacterLib{
         // console.log("反转函数已经被触发")
         const id =interop.tojs(L,1)
         const isLeft =interop.tojs(L,2)
-        sendFlip(id,isLeft)
+        CharacterIPCSender.sendFlip(id,isLeft)
         return 0
     }
 }

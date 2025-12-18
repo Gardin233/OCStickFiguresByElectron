@@ -8,19 +8,17 @@ print("当前 package.path: ", package.path)
 local Gwin = _G.Gwin
 ---@class Character
 local Character =_G.Character
+---@class Audio
+local Audio =_G.Audio
 print("Lua: 脚本开始运行...")
 
 -- Gwin.applyScreenFilter("OPPOSITE")
 -- GWin.openExe("C:\\Windows\\System32\\notepad.exe")
--- local a=GWin.getDesktopIconPos()
---     print(a)
 Character.createNewCharacter("/assets/spine/","Gardin")
 --回调函数
 
 
 print("Lua 脚本初始化完成")
-
-
 -- Gwin.getDesktopIconPos(function(err, icons)
 --     if err then
 --         print("获取桌面图标失败:", err)
@@ -36,7 +34,10 @@ print("Lua 脚本初始化完成")
 --         end
 --     end
 -- end)
--- Character.showHitBox("Gardin")
+        Audio.loadBGMFiles({
+    {id="Flooding_Greengrape",url="/assets/music/Flooding_Greengrape.ogg"},
+    {id="alarm_loop_sound",url="alarm_loop_sound.ogg"}})
+
 function Gwin.receiveInput(event)
     if event.type == "move" then
         Character.moveTo("Gardin",event.x,event.y,"line")
@@ -44,33 +45,25 @@ function Gwin.receiveInput(event)
     elseif event.type == "click" then
         -- Character.createNewCharacter("/assets/spine/","Gardin1")
         print("鼠标点击:", event.button)
-        Character.setPos("Gardin",event.x-1000,event.y-1000)---因为是队列，所以在移动事件清空前不会进行下一步操作
+        -- Character.setPos("Gardin",event.x-1000,event.y-1000)---因为是队列，所以在移动事件清空前不会进行下一步操作
         Character.checkHit("Gardin",event.x,event.y,function (err,data)
             if err then
+                print('错误')
                 print(err)
             end
-            print(data.name)
+            print("没啥事")
+            print(data)
         end)
-        -- Character.getHitBox("Gardin",function (err,data)
-        --     print(data[1].name,data[1].verts)
-        -- end)
-
-        -- Character.getPosToHitBoxDistance("Gardin",event.x,event.y,function (err,boxes)
-        --     if err then
-        --         print(err)
-        --     end
-        --     print(boxes[1].name,boxes[1].distance)
-
-        -- end)
         
-        -- Character.setPos("Gardin",10,20)
-        -- Character.moveTo("Gardin",120,121,'line')
     elseif event.type == "down" then
-        print("按下键盘:", event.keycode)
+        print("按下键盘:", event.keycode)    
+        Audio.mixBGM("Flooding_Greengrape")
+        
         Character.flip("Gardin",false)
     elseif event.type == "up" then
-        -- Character.playAnimation("Gardin",0,"jump",false)
+        Audio.preloadBGM('Flooding_Greengrape')
         print("抬起键盘:", event.keycode)
-        Character.flip("Gardin",true)
+   Audio.playBGM("Flooding_Greengrape",{volume=1,startTime=0,loop=false,fadeIn=1})
+     
     end
 end

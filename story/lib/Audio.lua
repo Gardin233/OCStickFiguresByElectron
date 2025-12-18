@@ -28,10 +28,10 @@ function Audio.releaseBGM(id)end
 function Audio.releaseSFX(id)end
 ---将音频压入BGM混合层
 ---@param id string 唯一标识符
-function Audio.addBGM(id)end
+function Audio.mixBGM(id)end
 ---将音频压入SFX混合层
 ---@param id string 唯一标识符
-function Audio.addSFX(id)end
+function Audio.mixSFX(id)end
 ---播放BGM
 ---@param id string 唯一标识符
 ---@param data {volume:number,

@@ -35,8 +35,8 @@ declare global {
         releaseBGM:(callback:(id:string)=>void)=>void,
         releaseSFX:(callback:(id:string)=>void)=>void,
         //压入混合层
-        addBGM:(callback:(id:string)=>void)=>void,
-        addSFX:(callback:(id:string)=>void)=>void,
+        mixBGM:(callback:(id:string)=>void)=>void,
+        mixSFX:(callback:(id:string)=>void)=>void,
         //启用播放
         playBGM:(callback:(id:string,data:AudioPlayData)=>void)=>void,
         playSFX:(callback:(id:string,data:AudioPlayData)=>void)=>void,

@@ -1,8 +1,8 @@
 import * as fengari from 'fengari';
 import * as interop from 'fengari-interop';
 import { lauxlib, lua } from "../StoryLoader/StoryLoader.js";
-import { sendGetcheckHit, sendGetHitBox, sendGetPosToHitBoxDistance } from '../ipc/renderer.send.js';
 import { ipcMain } from 'electron';
+import { CharacterIPCSender } from '../ipc/character.js';
 
 export function getHitBoxAsync(L) {
     const id = interop.tojs(L, 1);
@@ -44,7 +44,7 @@ export function getHitBoxAsync(L) {
     ipcMain.on("send-get-hit-box", listener);
 
     // 发送请求给渲染器
-    sendGetHitBox(id);
+    CharacterIPCSender.sendGetHitBox(id);
 
     return 0; // Lua 调用时返回值 0
 }
@@ -74,7 +74,7 @@ export function getcheckHitAsync(L){
         ipcMain.removeListener("send-check-hit", listener);
     }
     ipcMain.on("send-check-hit",listener)
-    sendGetcheckHit(id,x,y)
+    CharacterIPCSender.sendGetcheckHit(id,x,y)
 
     return 0
 }
@@ -104,6 +104,6 @@ export function getPosToHitBoxDistanceAsync(L){
         ipcMain.removeListener("send-get-pos-to-hit-box-distance", listener);
     }
     ipcMain.on("send-get-pos-to-hit-box-distance",listener)
-    sendGetPosToHitBoxDistance(id,x,y)
+    CharacterIPCSender.sendGetPosToHitBoxDistance(id,x,y)
     return 0
 }

@@ -40,14 +40,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     releaseBGM:(callback)=>{ipcRenderer.on("release-bgm",(_,id)=>callback(id))},
     releaseSFX:(callback)=>{ipcRenderer.on("release-sfx",(_,id)=>callback(id))},
     //压入混合层
-    addBGM:(callback)=>{ipcRenderer.on("add-bgm",(_,id)=>callback(id))},
-    addSFX:(callback)=>{ipcRenderer.on("add-sfx",(_,id)=>callback(id))},
+    mixBGM:(callback)=>{ipcRenderer.on("mix-bgm",(_,id)=>callback(id))},
+    mixSFX:(callback)=>{ipcRenderer.on("mix-sfx",(_,id)=>callback(id))},
     //启用播放
     playBGM:(callback)=>{ipcRenderer.on("play-bgm",(_,id,data)=>callback(id,data))},
     playSFX:(callback)=>{ipcRenderer.on("play-sfx",(_,id,data)=>callback(id,data))},
     //移出混合层
-    removeBGM:(callback)=>{ipcRenderer.on("stop-bgm",(_,id)=>callback(id))},
-    removeSFX:(callback)=>{ipcRenderer.on("stop-sfx",(_,id)=>callback(id))},
+    removeBGM:(callback)=>{ipcRenderer.on("remove-bgm",(_,id)=>callback(id))},
+    removeSFX:(callback)=>{ipcRenderer.on("remove-sfx",(_,id)=>callback(id))},
     
   }
 })

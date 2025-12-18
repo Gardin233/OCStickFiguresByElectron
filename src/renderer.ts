@@ -1,6 +1,9 @@
 import * as PIXI from 'pixi.js';
 import type { icon } from './types/desktop.js';
 import { CharacterIPC } from './client/ipc/character.js';
+import { AudioIPC } from './client/ipc/audio.js';
+import { AudioController } from './client/system/Audio/AudioController.js';
+import { SpineCharacter } from './client/system/character/SpineCharacter.js';
 export let ICONS:icon[] =[]
 
 // 创建 PixiJS 应用
@@ -34,8 +37,13 @@ async function boot() {
     
 //   // }
 // },2000)
- const chara=new CharacterIPC()
- chara.Init()
+const characters:Record<string,SpineCharacter>={}
+const audioController =new AudioController()
+audioController.Init()
+const chara=new CharacterIPC(characters)
+const audio =new AudioIPC(audioController)
+chara.Init()
+audio.Init()
   // setInterval(() => {
   //   // character.debugBoundingBoxes();
   // }, 16); // 大约每帧发送一次 (60 FPS)
