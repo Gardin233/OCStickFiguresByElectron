@@ -1,16 +1,19 @@
 ---@meta
 ---@class Gwin
 ---@field receiveInput fun(event: {
----   type: "move"|"click"|"down"|"up",
----   x: number,
----   y: number,
----   button: number?,
----   keycode: number?,
----   clicks: number?,
----   altKey: boolean?,
----   ctrlKey: boolean?,
----   shiftKey: boolean?,
----   metaKey: boolean? })
+---     type: "mousemove" |"mouseup"|"click"|"keydown"|"keyup"|"wheel",
+---     x: number,
+---     y: number,
+---     button: number?,
+---     keycode: number?,
+---     clicks: number?,
+---     direction:number,
+---     amout:number,
+---     rotation:number,
+---     altKey: boolean?,
+---     ctrlKey: boolean?,
+---     shiftKey: boolean?,
+---     metaKey: boolean? })
 local Gwin = {}
 
 ---@param t "IDLE"|"OPPOSITE"|"GRAYSCALE"|"HIGHCONTRAST"

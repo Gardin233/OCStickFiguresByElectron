@@ -15,7 +15,7 @@ print("Lua: 脚本开始运行...")
 
 
 -- GWin.openExe("C:\\Windows\\System32\\notepad.exe")
--- Character.createNewCharacter("/assets/spine/","Gardin")
+
 --回调函数
 
 
@@ -50,10 +50,11 @@ local tml = Timeline(function(builder)
     builder.stop()
     print("This message should not be printed")
 end)
-     
+
 function Gwin.receiveInput(event)
 
-    if event.type == "move" then
+    if event.type == "mousemove" then
+    elseif event.type =="mouseup" then
         -- Character.moveTo("Gardin",event.x,event.y,"line")
         -- print("鼠标移动到:", event.x, event.y)
     elseif event.type == "click" then
@@ -68,15 +69,18 @@ function Gwin.receiveInput(event)
         --     print("没啥事")
         --     print(data)
         -- end) 
-    elseif event.type == "down" then
+    elseif event.type == "wheel" then
+        print(event.direction)
+    elseif event.type == "keydown" then
         print("按下键盘:", event.keycode)    
         -- Character.flip("Gardin",false)
-    elseif event.type == "up" then
+    elseif event.type == "keyup" then
         print("抬起键盘:", event.keycode)
         -- Audio.playBGM("Flooding_Greengrape",{volume=1,startTime=0,loop=false,fadeIn=1})
     end
 end
-
-function Gwin.load()
-    tml.update(tml,0.005)
+local begin =require("plot")
+function Gwin.update(data)
+    tml.update(tml,data.dt)
+    begin.update(begin,data.dt)
 end

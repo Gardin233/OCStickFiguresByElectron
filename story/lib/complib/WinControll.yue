@@ -1,9 +1,0 @@
---未来将使用yuescript制作体验更友好的封装库
-local Character =_G.Character
-class SpineCharacter
-    new: ()=>
-        @id =''
-        Character.createNewCharacter(url,id)
-    showHitBox: (func)=>
-        Character.getHitBox(@id,func)
-    

@@ -1,4 +1,4 @@
-import { uIOhook, EventType, UiohookKeyboardEvent, UiohookMouseEvent } from 'uiohook-napi';
+import { uIOhook, EventType, UiohookKeyboardEvent, UiohookMouseEvent, UiohookWheelEvent } from 'uiohook-napi';
 import { lua } from 'fengari';
 import * as interop from 'fengari-interop';
 import { win } from '../../../main.js';
@@ -16,10 +16,12 @@ export class InputManager {
     }
     start() {
         // 注册 uiohook 事件
-        uIOhook.on('mousemove', (e: UiohookMouseEvent) => this.emit('move', e));
+        uIOhook.on('mousemove', (e: UiohookMouseEvent) => this.emit('mousemove', e));
         uIOhook.on('mousedown', (e: UiohookMouseEvent) => this.emit('click', e));
-        uIOhook.on('keydown', (e: UiohookKeyboardEvent) => this.emit('down', e));
-        uIOhook.on('keyup', (e: UiohookKeyboardEvent) => this.emit('up', e));
+        uIOhook.on('mouseup',(e:UiohookMouseEvent)=>this.emit('mouseup',e))
+        uIOhook.on('keydown', (e: UiohookKeyboardEvent) => this.emit('keydown', e));
+        uIOhook.on('keyup', (e: UiohookKeyboardEvent) => this.emit('keyup', e));
+        uIOhook.on('wheel',(e:UiohookWheelEvent)=>this.emit('wheel',e))     
         uIOhook.start();
         // 启动队列处理，保证在主线程调用 Lua
         this.intervalId = setInterval(() => this.flushQueue(), 5);
@@ -68,8 +70,12 @@ export class InputManager {
             const pos =convertToLocal(win,event.x,event.y)
             const luaEvent = {
                 type,
+                time:event.time,
                 x: pos.x,
                 y: pos.y,
+                direction:event.direction,
+                amout:event.amount,
+                rotation:event.rotation,
                 button: event.button,
                 keycode: event.keycode,
                 clicks: event.clicks,
