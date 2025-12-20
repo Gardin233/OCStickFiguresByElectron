@@ -1,6 +1,7 @@
----@diagnostic disable: undefined-field
-
-package.path = "?.lua;../story/src/?.lua;../story/src/?/init.lua"
+local Libpath  = "./story/src/?.lua;./story/src/?/init.lua;"
+local Libpath2 = "./story/lib/base/?.lua;./story/lib/complib/?.lua;./story/lib/?.lua;./story/lib/?/init.lua;"
+package.path = Libpath .. Libpath2 .. package.path
+local Timeline = require "timeline"
 print("当前 package.path: ", package.path)
 
 
@@ -12,7 +13,7 @@ local Character =_G.Character
 local Audio =_G.Audio
 print("Lua: 脚本开始运行...")
 
--- Gwin.applyScreenFilter("OPPOSITE")
+
 -- GWin.openExe("C:\\Windows\\System32\\notepad.exe")
 -- Character.createNewCharacter("/assets/spine/","Gardin")
 --回调函数
@@ -34,14 +35,24 @@ print("Lua 脚本初始化完成")
 --         end
 --     end
 -- end)
-    Audio.loadBGMFiles({
-        {id="Flooding_Greengrape",url="/assets/music/Flooding_Greengrape.ogg"},
-        {id ="alarm_loop_sound",url="alarm_loop_sound.ogg"}})
-    -- Audio.preloadBGM('Flooding_Greengrape',function (err,result)
-    --        print('ok') 
-    --     end)
-        
+Audio.loadBGMFiles({
+    {id="Flooding_Greengrape",url="/assets/music/Flooding_Greengrape.ogg"},
+    {id ="alarm_loop_sound",url="alarm_loop_sound.ogg"}}
+)
+local tml = Timeline(function(builder)
+    builder.sleep(1.0)
+    print("1.0 seconds passed")
+    builder.sleep(0.5)
+    print("1.5 seconds passed")
+    Gwin.applyScreenFilter("OPPOSITE")
+    builder.sleep_frame(30)
+    print("1.5 + 30 frames passed")
+    builder.stop()
+    print("This message should not be printed")
+end)
+     
 function Gwin.receiveInput(event)
+
     if event.type == "move" then
         -- Character.moveTo("Gardin",event.x,event.y,"line")
         -- print("鼠标移动到:", event.x, event.y)
@@ -57,16 +68,15 @@ function Gwin.receiveInput(event)
         --     print("没啥事")
         --     print(data)
         -- end) 
-
     elseif event.type == "down" then
         print("按下键盘:", event.keycode)    
-        -- Audio.mixBGM("Flooding_Greengrape")
-        
         -- Character.flip("Gardin",false)
     elseif event.type == "up" then
-       
         print("抬起键盘:", event.keycode)
-        Audio.playBGM("Flooding_Greengrape",{volume=1,startTime=0,loop=false,fadeIn=1})
-     
+        -- Audio.playBGM("Flooding_Greengrape",{volume=1,startTime=0,loop=false,fadeIn=1})
     end
+end
+
+function Gwin.load()
+    tml.update(tml,0.005)
 end

@@ -23,6 +23,7 @@ async function Start() {
   const story =new StoryLoader()
   story.Init()
   story.run()
+  
 }) 
 
 ipcMain.handle('get-desktop-icons', async () => {
