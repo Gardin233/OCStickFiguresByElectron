@@ -3,10 +3,11 @@ import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lua } from "./StoryLoader.js";
-import { AudioIPCSender } from "../ipc/audio.js";
+import { AudioManager } from "../audio/AudioManager.js";
 export class AudioLib{
     private L:any;
     private libNames:{name:string,func:Function}[]
+    private audioManager =new AudioManager()
     constructor(LuaL){
         this.L=LuaL
         this.libNames=[
@@ -14,16 +15,8 @@ export class AudioLib{
             {name:'loadSFXFiles',func:this.loadSFXFiles.bind(this)},
             {name:'unloadBGM',func:this.unloadBGM.bind(this)},
             {name:'unloadSFX',func:this.unloadSFX.bind(this)},
-            {name:'preloadBGM',func:this.preloadBGM.bind(this)},
-            {name:'preloadSFX',func:this.preloadSFX.bind(this)},
-            {name:'releaseBGM',func:this.releaseBGM.bind(this)},
-            {name:'releaseSFX',func:this.releaseSFX.bind(this)},
-            {name:'mixBGM',func:this.mixBGM.bind(this)},
-            {name:'mixSFX',func:this.mixSFX.bind(this)},
             {name:'playBGM',func:this.playBGM.bind(this)},
             {name:'playSFX',func:this.playSFX.bind(this)},
-            {name:'removeBGM',func:this.removeBGM.bind(this)},
-            {name:'removeSFX',func:this.removeSFX.bind(this)}
         ]
     }
     public Init(){
@@ -43,10 +36,11 @@ export class AudioLib{
 
         bgms.push({
             id: item.get('id'),
-            url: item.get('url')
+            url: path.join(process.cwd(),item.get('url'))
         });
         }
-        AudioIPCSender.loadBGMFiles(bgms)
+        this.audioManager.loadBGMFiles(bgms)
+        console.log('发送注册请求给BGM管理器')
         return 0
     }
     public loadSFXFiles(){
@@ -58,51 +52,20 @@ export class AudioLib{
         const item = luaTable.get(i); // 获取嵌套的 Table 包装对象
         sfxs.push({
             id: item.get('id'),
-            url: item.get('url')
+            url: path.join(process.cwd(),item.get('url'))
         });
         }
-        AudioIPCSender.loadSFXFiles(sfxs)
+        console.log(sfxs)
         return 0
     }
     public unloadBGM(){
         const id = interop.tojs(this.L,1)
-        AudioIPCSender.unloadBGM(id)
+        this.audioManager.unloadBGM(id)
         return 0
     }
     public unloadSFX(){
         const id = interop.tojs(this.L,1)
-        AudioIPCSender.unloadSFX(id)
-        return 0
-    }
-    public preloadBGM(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.preloadBGM(id)
-        return 0
-    }
-    public preloadSFX(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.preloadSFX(id)
-        return 0
-    }
-    public releaseBGM(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.releaseBGM(id)
-        return 0
-    }
-    public releaseSFX(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.releaseSFX(id)
-        return 0
-    
-    }
-    public mixBGM(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.mixBGM(id)
-        return 0
-    }
-    public mixSFX(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.mixSFX(id)
+        this.audioManager.unloadSFX(id)
         return 0
     }
     public playBGM(){
@@ -114,7 +77,7 @@ export class AudioLib{
             loop:Ldata.get('loop'),
             fadeIn:Ldata.get('fadeIn')
         }
-        AudioIPCSender.playBGM(id,data)
+        this.audioManager.playBGM(id,data)
         return 0
         
     }
@@ -127,19 +90,9 @@ export class AudioLib{
             loop:Ldata.get('loop'),
             fadeIn:Ldata.get('fadeIn')
         }
-        AudioIPCSender.playSFX(id,data)
+        this.audioManager.playSFX(id,data)
         return 0
         
     }
-    public removeBGM(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.removeBGM(id)
-        return 0
-    
-    }
-    public removeSFX(){
-        const id = interop.tojs(this.L,1)
-        AudioIPCSender.releaseSFX(id)
-        return 0
-    }
+
 }

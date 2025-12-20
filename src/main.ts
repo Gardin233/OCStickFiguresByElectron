@@ -11,6 +11,7 @@ import { lua, StoryLoader } from './server/StoryLoader/StoryLoader.js';
 
 export let SYS_ICONS:icon[]=[] 
 export let win: BrowserWindow | null = null
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 export const Wdirname = dirname(fileURLToPath(import.meta.url));
 async function Start() {
   win =await createWindow()

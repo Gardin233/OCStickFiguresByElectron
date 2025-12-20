@@ -28,21 +28,10 @@ declare global {
         //删除注册
         unloadBGM:(callback:(id:string)=>void)=>void,
         unloadSFX:(callback:(id:string)=>void)=>void, 
-        //预载
-        preloadBGM:(callback:(id:string)=>void)=>void,
-        preloadSFX:(callback:(id:string)=>void)=>void,
-        //卸载
-        releaseBGM:(callback:(id:string)=>void)=>void,
-        releaseSFX:(callback:(id:string)=>void)=>void,
-        //压入混合层
-        mixBGM:(callback:(id:string)=>void)=>void,
-        mixSFX:(callback:(id:string)=>void)=>void,
         //启用播放
         playBGM:(callback:(id:string,data:AudioPlayData)=>void)=>void,
         playSFX:(callback:(id:string,data:AudioPlayData)=>void)=>void,
-        //移出混合层
-        removeBGM:(callback:(id:string)=>void)=>void,
-        removeSFX:(callback:(id:string)=>void)=>void,
+        
             
       }
     }

@@ -14,7 +14,7 @@ print("Lua: 脚本开始运行...")
 
 -- Gwin.applyScreenFilter("OPPOSITE")
 -- GWin.openExe("C:\\Windows\\System32\\notepad.exe")
-Character.createNewCharacter("/assets/spine/","Gardin")
+-- Character.createNewCharacter("/assets/spine/","Gardin")
 --回调函数
 
 
@@ -34,36 +34,39 @@ print("Lua 脚本初始化完成")
 --         end
 --     end
 -- end)
-        Audio.loadBGMFiles({
-    {id="Flooding_Greengrape",url="/assets/music/Flooding_Greengrape.ogg"},
-    {id="alarm_loop_sound",url="alarm_loop_sound.ogg"}})
-
+    Audio.loadBGMFiles({
+        {id="Flooding_Greengrape",url="/assets/music/Flooding_Greengrape.ogg"},
+        {id ="alarm_loop_sound",url="alarm_loop_sound.ogg"}})
+    -- Audio.preloadBGM('Flooding_Greengrape',function (err,result)
+    --        print('ok') 
+    --     end)
+        
 function Gwin.receiveInput(event)
     if event.type == "move" then
-        Character.moveTo("Gardin",event.x,event.y,"line")
+        -- Character.moveTo("Gardin",event.x,event.y,"line")
         -- print("鼠标移动到:", event.x, event.y)
     elseif event.type == "click" then
         -- Character.createNewCharacter("/assets/spine/","Gardin1")
         print("鼠标点击:", event.button)
         -- Character.setPos("Gardin",event.x-1000,event.y-1000)---因为是队列，所以在移动事件清空前不会进行下一步操作
-        Character.checkHit("Gardin",event.x,event.y,function (err,data)
-            if err then
-                print('错误')
-                print(err)
-            end
-            print("没啥事")
-            print(data)
-        end)
-        
+        -- Character.checkHit("Gardin",event.x,event.y,function (err,data)
+        --     if err then
+        --         print('错误')
+        --         print(err)
+        --     end
+        --     print("没啥事")
+        --     print(data)
+        -- end) 
+
     elseif event.type == "down" then
         print("按下键盘:", event.keycode)    
-        Audio.mixBGM("Flooding_Greengrape")
+        -- Audio.mixBGM("Flooding_Greengrape")
         
-        Character.flip("Gardin",false)
+        -- Character.flip("Gardin",false)
     elseif event.type == "up" then
-        Audio.preloadBGM('Flooding_Greengrape')
+       
         print("抬起键盘:", event.keycode)
-   Audio.playBGM("Flooding_Greengrape",{volume=1,startTime=0,loop=false,fadeIn=1})
+        Audio.playBGM("Flooding_Greengrape",{volume=1,startTime=0,loop=false,fadeIn=1})
      
     end
 end

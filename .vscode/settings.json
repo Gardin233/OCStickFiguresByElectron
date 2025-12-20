@@ -14,4 +14,7 @@
         "comments": "off",
         "strings": "on"
     },
+    "Lua.diagnostics.disable": [
+        "undefined-field"
+    ],
 }

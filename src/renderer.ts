@@ -1,8 +1,6 @@
 import * as PIXI from 'pixi.js';
 import type { icon } from './types/desktop.js';
 import { CharacterIPC } from './client/ipc/character.js';
-import { AudioIPC } from './client/ipc/audio.js';
-import { AudioController } from './client/system/Audio/AudioController.js';
 import { SpineCharacter } from './client/system/character/SpineCharacter.js';
 export let ICONS:icon[] =[]
 
@@ -13,7 +11,9 @@ export const app = new PIXI.Application({
   antialias: true,
 });
 document.body.appendChild(app.view);
+
 async function boot() {
+
   // console.log('角色加载完成', character);
   // 事件绑定要在实例创建之后
   if (!window.electronAPI) console.warn('electronAPI 未定义，事件绑定失败');
@@ -38,13 +38,10 @@ async function boot() {
 //   // }
 // },2000)
 const characters:Record<string,SpineCharacter>={}
-const audioController =new AudioController()
-audioController.Init()
 const chara=new CharacterIPC(characters)
-const audio =new AudioIPC(audioController)
 chara.Init()
-audio.Init()
-  // setInterval(() => {
+
+// setInterval(() => {
   //   // character.debugBoundingBoxes();
   // }, 16); // 大约每帧发送一次 (60 FPS)
 }
