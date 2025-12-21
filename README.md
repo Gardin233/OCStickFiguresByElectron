@@ -1,7 +1,7 @@
 # OCStickFiguresEngine
 
 基于 Electron + TypeScript + Vite + PixiJSv6 + pixi-spine ，需要Spine 3.8 model
-[官方文档（开发中纯占位ing）](https://gardin233.github.io/SFBE-docs/)
+[官方文档](https://gardin233.github.io/SFBE-docs/)
 
 ## 为什么我要做这个？
 
@@ -22,14 +22,13 @@
 │   ├── client              # 用户逻辑存放处
 │   │   ├── character       # 角色
 │   │   ├── ipc             # 通信监听封装
-│   │   ├── effectsLayer    # 特效层
 │   │   └── utils           # 方法
 │   │
 │   ├── server              # 后台逻辑
 │   │   ├── Async           # 异步函数封装
-│   │   ├── hooks           # 钩子
 │   │   ├── ipc             # 通信监听封装
 │   │   ├── process         # 运行过程中需要持久的程序
+│   │   ├── StoryLoader         # 控制故事
 │   │   └── utils           # 方法
 │   │
 │   └── types               # 类型

@@ -12,13 +12,7 @@ local Character =_G.Character
 ---@class Audio
 local Audio =_G.Audio
 print("Lua: 脚本开始运行...")
-
-
 -- GWin.openExe("C:\\Windows\\System32\\notepad.exe")
-
---回调函数
-
-
 print("Lua 脚本初始化完成")
 -- Gwin.getDesktopIconPos(function(err, icons)
 --     if err then
@@ -44,7 +38,7 @@ local tml = Timeline(function(builder)
     print("1.0 seconds passed")
     builder.sleep(0.5)
     print("1.5 seconds passed")
-    Gwin.applyScreenFilter("OPPOSITE")
+    -- Gwin.applyScreenFilter("OPPOSITE")
     builder.sleep_frame(30)
     print("1.5 + 30 frames passed")
     builder.stop()

@@ -8,23 +8,22 @@ import { icon } from './types/desktop.js';
 import { createWindow, setGlobalHooks } from './server/utils/windowLoader/basic/basicWindow.js';
 import { setWindow } from './server/utils/windowLoader/basic/setting.js';
 import { lua, StoryLoader } from './server/StoryLoader/StoryLoader.js';
-
+import { windowController } from './server/utils/windowLoader/windowController.js';
 export let SYS_ICONS:icon[]=[] 
 export let win: BrowserWindow | null = null
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 export const Wdirname = dirname(fileURLToPath(import.meta.url));
+const wc= new windowController()
 async function Start() {
   win =await createWindow()
- 
   setWindow(win)
   setGlobalHooks()
   win.webContents.once("did-finish-load",()=>{
- 
   const story =new StoryLoader()
   story.Init()
   story.run()
-  
-}) 
+})
+
+wc.create("wd",'hello.html',{width:600,height:600,x:99,y:99,title:'你好'})
 
 ipcMain.handle('get-desktop-icons', async () => {
     SYS_ICONS =await getDesktopIconPosition()
@@ -45,9 +44,5 @@ app.whenReady().then(Start).then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
-})
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) Start()
 })
 
