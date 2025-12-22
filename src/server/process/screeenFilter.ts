@@ -1,10 +1,12 @@
 import { ChildProcess, execFile } from "child_process";
+import { app } from "electron";
 import path from "path";
+import { externalBase } from "../../global.js";
 
   // 全局保存子进程实例（只启动一次）
 let screenFilterProcess: ChildProcess | null = null;
 
-const exePath = path.join(process.cwd(), "external", "changeScreen.exe");
+const exePath = path.join(externalBase, "external", "changeScreen.exe");
 // 函数：启动（或重用）子进程
 export function getOrCreateScreenFilterProcess(): ChildProcess {
     if (screenFilterProcess && !screenFilterProcess.killed && screenFilterProcess.exitCode === null) {

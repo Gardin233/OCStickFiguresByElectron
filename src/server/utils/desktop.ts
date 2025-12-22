@@ -7,8 +7,8 @@ import { icon } from '../../types/desktop.js'
 
 function resolveExePath() {
   return app.isPackaged
-    ? path.join(process.resourcesPath, "external",'EnumDesktopIcons.exe')  // 打包后位置
-    : path.join(process.cwd(),'external','EnumDesktopIcons.exe')          // dev 位置在项目根目录
+    ? path.join(process.resourcesPath ,"resources","external",'EnumDesktopIcons.exe')  // 打包后位置
+    : path.join(process.cwd(),'..','external','EnumDesktopIcons.exe')          // dev 位置在项目根目录
 }
 
 /**

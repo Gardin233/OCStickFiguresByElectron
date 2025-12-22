@@ -2,29 +2,41 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import { getDesktopIconPosition } from './server/utils/desktop.js'
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { convertToLocal } from './server/utils/position.js';
 import { icon } from './types/desktop.js';
 import { createWindow, setGlobalHooks } from './server/utils/windowLoader/basic/basicWindow.js';
 import { setWindow } from './server/utils/windowLoader/basic/setting.js';
 import { lua, StoryLoader } from './server/StoryLoader/StoryLoader.js';
 import { windowController } from './server/utils/windowLoader/windowController.js';
+import cp from 'child_process';
+if (app.isPackaged) {
+    const originalSpawn = cp.spawn;
+    // @ts-ignore
+    cp.spawn = function (command: string, args: any, options: any) {
+        // 如果发现正在启动 asar 里的 vlc.exe
+        if (typeof command === 'string' && command.includes('app.asar') && command.includes('vlc.exe')) {
+            const fixedCommand = command.replace('app.asar', 'app.asar.unpacked');
+            console.log('检测到 VLC 启动，路径已自动劫持重定向至:', fixedCommand);
+            return originalSpawn.call(this, fixedCommand, args, options);
+        }
+        return originalSpawn.call(this, command, args, options);
+    };
+}
 export let SYS_ICONS:icon[]=[] 
 export let win: BrowserWindow | null = null
 export const Wdirname = dirname(fileURLToPath(import.meta.url));
-const wc= new windowController()
+export let wc:windowController|null= null
 async function Start() {
   win =await createWindow()
   setWindow(win)
   setGlobalHooks()
+  wc = new windowController()
   win.webContents.once("did-finish-load",()=>{
   const story =new StoryLoader()
   story.Init()
   story.run()
 })
-
-wc.create("wd",'hello.html',{width:600,height:600,x:99,y:99,title:'你好'})
-
 ipcMain.handle('get-desktop-icons', async () => {
     SYS_ICONS =await getDesktopIconPosition()
     for(const item of SYS_ICONS){

@@ -1,7 +1,8 @@
-import { BrowserWindow } from "electron";
+import { app, BrowserWindow } from "electron";
 import { Wdirname } from "../../../main.js";
 import path, { join } from "path";
 import { WindowCreateOptions } from "../../../types/window.js";
+import { resourcesBase } from "../../../global.js";
 
 export class windowController{
     public wins:Map<string,BrowserWindow>= new Map()
@@ -15,7 +16,7 @@ export class windowController{
             height:data.height,
             x: data.x,
             y: data.y,
-            frame: true,
+            frame: data.frame??true,
             transparent: false,           // 窗口透明
             // backgroundColor: 'transparent',
             hasShadow: false,
@@ -29,8 +30,8 @@ export class windowController{
               preload: join(Wdirname,'preload.cjs') 
             }
           })
-          userWin.loadFile(path.join(Wdirname,'../',"story",'page',url))
-          
+          const storyPagePath = path.join(resourcesBase, '..', 'story/page', url);
+          userWin.loadFile(path.join(storyPagePath))
           userWin.setTitle(data.title)
           userWin.on('page-title-updated', (e) => {
             e.preventDefault();

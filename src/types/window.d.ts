@@ -7,9 +7,6 @@ export interface WindowCreateOptions {                  // 可选，用户自定
   frame?: boolean;              // 是否有边框
   transparent?: boolean;        // 窗口透明
   skipTaskbar?: boolean;        // 跳过任务栏
-  focusable?: boolean;          // 是否可聚焦
   fullscreen?: boolean;
   resizable?: boolean;
-  page?: string;                // 关键：加载的页面（preview.html / custom.html 等）
-  [key: string]: any;           // 允许扩展自定义字段
 }

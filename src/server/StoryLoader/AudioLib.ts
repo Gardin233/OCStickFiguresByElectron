@@ -4,6 +4,7 @@ import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
 import { lua } from "./StoryLoader.js";
 import { AudioManager } from "../audio/AudioManager.js";
+import { app } from "electron";
 export class AudioLib{
     private L:any;
     private libNames:{name:string,func:Function}[]
@@ -30,13 +31,13 @@ export class AudioLib{
     public loadBGMFiles(){
         const luaTable = interop.tojs(this.L, 1)
         const bgms = []
+        const resourcesBase = app.isPackaged ? process.resourcesPath : app.getAppPath();
         for (let i = 1; ; i++) {
         if (!luaTable.has(i)) break; // 如果没有这个索引了，跳出循环
         const item = luaTable.get(i); // 获取嵌套的 Table 包装对象
-
         bgms.push({
             id: item.get('id'),
-            url: path.join(process.cwd(),item.get('url'))
+            url: path.join(resourcesBase,'..','story','assets',item.get('url'))
         });
         }
         this.audioManager.loadBGMFiles(bgms)
@@ -45,17 +46,17 @@ export class AudioLib{
     }
     public loadSFXFiles(){
         const luaTable = interop.tojs(this.L, 1)
-
+        const resourcesBase = app.isPackaged ? process.resourcesPath : app.getAppPath();
         const sfxs = []
         for (let i = 1; ; i++) {
         if (!luaTable.has(i)) break; // 如果没有这个索引了，跳出循环
         const item = luaTable.get(i); // 获取嵌套的 Table 包装对象
         sfxs.push({
             id: item.get('id'),
-            url: path.join(process.cwd(),item.get('url'))
+            url: path.join(resourcesBase,'..','story','assets',item.get('url'))
         });
         }
-        console.log(sfxs)
+        console.log('处理后',sfxs)
         return 0
     }
     public unloadBGM(){

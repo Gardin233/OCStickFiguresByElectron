@@ -30,15 +30,17 @@ print("Lua 脚本初始化完成")
 --     end
 -- end)
 Audio.loadBGMFiles({
-    {id="Flooding_Greengrape",url="/assets/music/Flooding_Greengrape.ogg"},
-    {id ="alarm_loop_sound",url="alarm_loop_sound.ogg"}}
+    {id="Flooding_Greengrape",url="/music/Flooding_Greengrape.ogg"},
+    {id ="alarm_loop_sound",url="/music/alarm_loop_sound.ogg"}}
 )
 local tml = Timeline(function(builder)
     builder.sleep(1.0)
     print("1.0 seconds passed")
     builder.sleep(0.5)
     print("1.5 seconds passed")
+    Gwin.createNewWindow("wd",'hello.html',{width=600,height=600,x=0,y=0,title='你好'})
     -- Gwin.applyScreenFilter("OPPOSITE")
+    Gwin.createNewWindow("wd",'demo.html',{width=600,height=600,x=99,y=99,title='你好',frame=false})
     builder.sleep_frame(30)
     print("1.5 + 30 frames passed")
     builder.stop()

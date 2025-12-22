@@ -4,7 +4,8 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  root: '.',
+  base:'./',
+  root: './',
   build: {
     outDir: 'dist',
     emptyOutDir: false

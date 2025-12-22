@@ -13,8 +13,8 @@ export class SpineCharacter {
     this.renderer =new SpineRenderer(stage)
   }
   //渲染图形后再注册其他组件
-  async load(globPattern: Record<string, string>) {
-    await this.renderer.loadFromGlob(globPattern)
+  async load( url:string) {
+    await this.renderer.loadModel(url)
     this.animator.setSpine(this.renderer.spine)
     this.mover = new Mover(this.renderer.spine)
     this.hitChecker = new HitChecker(this)

@@ -19,21 +19,15 @@ export async function createWindow() {
     focusable: false,             // 可聚焦（方便调试/交互）
     webPreferences: {
       contextIsolation: true,
+      
       // sandbox: true,
       webSecurity: false,           // 关闭 web 安全（允许跨域、file:// 加载）
       nodeIntegration: false,
       preload: join(Wdirname,'preload.cjs') 
     }
+    
   })
 win.webContents.session.setPermissionCheckHandler(() => true);
-win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-  callback({
-    responseHeaders: {
-      ...details.responseHeaders,
-      'Content-Security-Policy': ['script-src \'self\' \'unsafe-eval\'; object-src \'self\'']
-    }
-  });
-});
   console.log(process.versions.node);
   return win
     

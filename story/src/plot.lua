@@ -8,7 +8,7 @@ local Audio =_G.Audio
 local Timeline = require "timeline"
 local begin=Timeline(function (builder)
     builder.sleep(0.2)
-  Character.createNewCharacter("/assets/spine/","gardin")
+  Character.createNewCharacter("/spine/gardin.json","gardin")
     builder.sleep(2)
     Character.playAnimation('gardin',0,'walk',true)
     while true do

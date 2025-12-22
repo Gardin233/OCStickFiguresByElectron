@@ -4,7 +4,7 @@
     "name": "Gardin",
     "email": "gardin233@gmail.com"
   },
-  "version": "1.1.6-alpha",
+  "version": "1.1.7-alpha",
   "private": true,
   "main": "dist/main.js",
   "type": "module",
@@ -19,12 +19,20 @@
       "dist-electron",
       "!**/*.map"
     ],
+    "asarUnpack": [
+      "**/node_modules/vlc-static/**/*"
+    ],
+
     "extraResources": [
       {
         "from": "./external",
         "to": "./external"
       }
-    ]
+    ],
+    "win": {
+    "target": "nsis",        
+    "forceCodeSigning": false 
+  }
   },
   "scripts": {
     "dev": "set VITE_DEV_SERVER_URL=http://localhost:5173&& concurrently \"tsc -w\" \"vite\" \"powershell -NoProfile -Command Copy-Item -Force src\\preload.cjs dist\\preload.cjs\" \"wait-on http://localhost:5173 && electron dist/main.js\"",

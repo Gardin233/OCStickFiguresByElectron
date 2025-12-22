@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>无边框窗口</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #1e1e1e;
+      color: #ddd;
+      font-family: system-ui, sans-serif;
+      user-select: none;
+    }
+
+    /* ===== 自定义标题栏 ===== */
+    .titlebar {
+      height: 32px;
+      background: #2b2b2b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      -webkit-app-region: drag; /* 👈 可拖拽区域 */
+    }
+
+    .title {
+      padding-left: 10px;
+      font-size: 13px;
+      opacity: 0.85;
+    }
+
+    .window-controls {
+      display: flex;
+      height: 100%;
+      -webkit-app-region: no-drag; /* 👈 按钮不能拖 */
+    }
+
+    .btn {
+      width: 46px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      color: #ccc;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn.close:hover {
+      background: #e81123;
+      color: white;
+    }
+
+    /* ===== 内容区域 ===== */
+    .content {
+      padding: 12px;
+      height: calc(100% - 32px);
+      box-sizing: border-box;
+      overflow: auto;
+      user-select: text;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="titlebar">
+    <div class="title">你好，Electron</div>
+    <div class="window-controls">
+      <button class="btn minimize">—</button>
+      <button class="btn maximize">▢</button>
+      <button class="btn close">✕</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>无 frame 窗口</h3>
+    <p>这是一个自定义标题栏的 Electron 窗口。</p>
+    <p>你可以在这里放编辑器、舞台、时间线、Lua UI。</p>
+  </div>
+
+  <script>
+    // preload 里通过 contextBridge 暴露的 API
+    const api = window.electronAPI
+
+    document.querySelector('.close').onclick = () => {
+      api.close()
+    }
+
+    document.querySelector('.minimize').onclick = () => {
+      api.minimize()
+    }
+
+    document.querySelector('.maximize').onclick = () => {
+      api.toggleMaximize()
+    }
+  </script>
+
+</body>
+</html>

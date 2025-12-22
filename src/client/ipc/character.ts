@@ -15,8 +15,9 @@ export class CharacterIPC{
     }
     private async create(){
         window.electronAPI.character.createNewSpine(async (files,id)=>{
+            console.log(id,files)
             const character = new SpineCharacter(app.stage);
-            await character.load(files);
+            await character.load(files[id]);
             this.characters[id]=character
             return "ok"
         })

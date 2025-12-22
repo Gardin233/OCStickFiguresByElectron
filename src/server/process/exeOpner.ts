@@ -1,8 +1,10 @@
 import { ChildProcess,execFile } from "child_process";
+import { app } from "electron";
 import path from "path"
+import { externalBase } from "../../global.js";
 
 let DeskTopOpner:ChildProcess |null =null
-const exePath =path.join(process.cwd(),"external","openDesktopIcon.exe")
+const exePath =path.join(externalBase,"external","openDesktopIcon.exe")
 
 export function getOrCreateDeskTopOpnerProcess():ChildProcess{
      if (DeskTopOpner && !DeskTopOpner.killed && DeskTopOpner.exitCode === null) {

@@ -6,6 +6,8 @@ import { lauxlib, lua } from "./StoryLoader.js";
 import { CharacterIPCSender} from "../ipc/character.js";
 import { app } from "electron";
 import { getcheckHitAsync, getHitBoxAsync, getPosToHitBoxDistanceAsync} from "../Async/Character.js";
+import { pathToFileURL } from "url";
+import { resourcesBase } from "../../global.js";
 export class CharacterLib{
     private libNames:{name:string,func:Function}[]=[]
     L: any;
@@ -33,32 +35,24 @@ export class CharacterLib{
         }
         lua.lua_setglobal(this.L, "Character"); 
     }
-    private createNewCharacterSpine(L){
-        const url =interop.tojs(L,1)
-        const id =interop.tojs(L,2)
-        console.log("来自lua的位置",url)
-        // 主进程提前处理目录，构造 Spine 所需的文件结构
-        const absDir = path.join(app.getAppPath(),"..", url);
-        console.log(absDir)
-    if (!fs.existsSync(absDir)) {
-        throw new Error("目录不存在: " + absDir);
-    }
-
-    const files = fs.readdirSync(absDir);
+private createNewCharacterSpine(L) {
+    // 1. 获取 Lua 传入的参数
+    const rawUrl = interop.tojs(L, 1); // 例如: "/spine/gardin.json"
+    const id = interop.tojs(L, 2);     // 例如: "gardin"
     const spineFiles: Record<string, string> = {};
-
-    for (const file of files) {
-        const full = path.join(absDir, file);
-        const ext = path.extname(file).toLowerCase();
-
-        if (ext === ".json") {
-            spineFiles[file] = "file://" + full.replace(/\\/g, "/");
-        }
+    // 2. 统一基础路径
+    const baseDir = path.join(resourcesBase, ".."); 
+    const fullJsonPath = path.join(baseDir,'story','assets', rawUrl);
+    if (!fs.existsSync(fullJsonPath)) {
+        console.error("Spine 文件不存在:", fullJsonPath);
+        return 0;
     }
-    console.log(spineFiles)
-        CharacterIPCSender.sendCreateNewSpineMessage(spineFiles,id)
-        return 0
-    }
+    const fileUrl = pathToFileURL(fullJsonPath).href;
+    console.log("发送给渲染进程的 Spine 主文件:", fileUrl);
+    spineFiles[id] =fileUrl
+    CharacterIPCSender.sendCreateNewSpineMessage(spineFiles, id);
+    return 0;
+}
     private delete(L){
         const id =interop.tojs(L,1)
         CharacterIPCSender.sendDeleteSpine(id)
