@@ -6,6 +6,9 @@ export {}
 declare global {
   interface Window {
     electronAPI: {
+      close:()=>void
+      minimize:()=>void
+      toggleMaximize:()=>void
       character: {
         createNewSpine: (callback: (files: Record<string, string>, id: string) => void) => void
         deleteSpine: (callback: (id: string) => void) => void

@@ -3,7 +3,7 @@ export interface WindowCreateOptions {                  // 可选，用户自定
   height: number;
   x: number;
   y: number;
-  title: string;
+  title?: string;
   frame?: boolean;              // 是否有边框
   transparent?: boolean;        // 窗口透明
   skipTaskbar?: boolean;        // 跳过任务栏

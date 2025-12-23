@@ -43,7 +43,7 @@ export class InputManager {
 
             // 获取 Lua 回调
             // lua.lua_getglobal(this.L, this.luaCallbackName);
-            lua.lua_getglobal(this.L, 'Gwin');
+            lua.lua_getglobal(this.L, 'Gsys');
                 if (lua.lua_type(this.L, -1) !== lua.LUA_TTABLE) {
                     // console.error('Lua table Gwin not found');
                     lua.lua_pop(this.L, 1);

@@ -4,7 +4,8 @@ package.path = Libpath .. Libpath2 .. package.path
 local Timeline = require "timeline"
 print("当前 package.path: ", package.path)
 
-
+---@class Gsys
+local Gsys = _G.Gsys
 ---@class Gwin 
 local Gwin = _G.Gwin
 ---@class Character
@@ -29,6 +30,8 @@ print("Lua 脚本初始化完成")
 --         end
 --     end
 -- end)
+local screenSize =Gsys.getScreenSize()
+print(screenSize.width,screenSize.height)
 Audio.loadBGMFiles({
     {id="Flooding_Greengrape",url="/music/Flooding_Greengrape.ogg"},
     {id ="alarm_loop_sound",url="/music/alarm_loop_sound.ogg"}}
@@ -38,16 +41,16 @@ local tml = Timeline(function(builder)
     print("1.0 seconds passed")
     builder.sleep(0.5)
     print("1.5 seconds passed")
-    Gwin.createNewWindow("wd",'hello.html',{width=600,height=600,x=0,y=0,title='你好'})
+    Gwin.createNewWindow("wd",'hello.html',{width=600,height=600,x=0,y=0,title='带默认标头的标题设置'})
     -- Gwin.applyScreenFilter("OPPOSITE")
-    Gwin.createNewWindow("wd",'demo.html',{width=600,height=600,x=99,y=99,title='你好',frame=false})
+    Gwin.createNewWindow("wdw",'demo.html',{width=600,height=600,x=99,y=99,title='你好',frame=false})
     builder.sleep_frame(30)
     print("1.5 + 30 frames passed")
     builder.stop()
     print("This message should not be printed")
 end)
 
-function Gwin.receiveInput(event)
+function Gsys.receiveInput(event)
 
     if event.type == "mousemove" then
     elseif event.type =="mouseup" then
@@ -76,7 +79,7 @@ function Gwin.receiveInput(event)
     end
 end
 local begin =require("plot")
-function Gwin.update(data)
+function Gsys.update(data)
     tml.update(tml,data.dt)
     begin.update(begin,data.dt)
 end

@@ -1,6 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  close:()=>{ipcRenderer.send(`win:close`)},
+  minimize:()=>{ipcRenderer.send(`win:minimize`)},
+  toggleMaximize:()=>{ipcRenderer.send(`win:toggle-maximize`)},
   character:{
     //创建与删除角色
     createNewSpine:(callback)=>{ipcRenderer.on("create-new-spine",(_,files,id)=>callback(files,id))},

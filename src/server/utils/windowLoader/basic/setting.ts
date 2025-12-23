@@ -13,7 +13,7 @@ export async function setWindow(win:BrowserWindow){
     win.loadFile(join(app.getAppPath(), 'dist', 'index.html'))
   }
   // 开发模式打开 DevTools
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development'&&!app.isPackaged) {
     win.webContents.openDevTools({ mode: 'detach' })
   }
   // 渲染完成后设置点击穿透，但允许前端自己处理模型点击

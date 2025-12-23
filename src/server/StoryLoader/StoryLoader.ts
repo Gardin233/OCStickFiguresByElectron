@@ -2,13 +2,14 @@ import fs from "fs"
 import path from "path";
 import * as fengari from 'fengari'
 import * as interop from 'fengari-interop'
-import { WindowLib } from "./WindowLib.js";
+import { WindowLib } from "./WinLib.js";
 import { CharacterLib } from "./Character.js";
 import { InputManager } from "./listener/uiohook.js";
 import { AudioLib } from "./AudioLib.js";
 import { TimeManager } from "./listener/time.js";
 
 import { to_luastring } from "fengari";
+import { SysLib } from "./SysLib.js";
 
 export const lua = fengari.lua;
 export const lauxlib = fengari.lauxlib;
@@ -20,7 +21,9 @@ export class StoryLoader{
     private audioLib:AudioLib
     private inputMgr:InputManager
     private timeMgr:TimeManager
+    private SysLib:SysLib
     constructor(){
+        this.SysLib = new SysLib(this.L)
         this.windowLib=new WindowLib(this.L)
         this.characterLib=new CharacterLib(this.L)
         this.audioLib= new AudioLib(this.L)
@@ -31,6 +34,7 @@ export class StoryLoader{
         this.L.global
     }
     public Init(){
+        this.SysLib.Init()
         this.windowLib.Init()
         this.characterLib.Init()
         this.audioLib.Init()
@@ -44,7 +48,6 @@ export class StoryLoader{
             //执行 Lua 代码
             const status = lauxlib.luaL_dofile(this.L, luaFilePath);
             // 检查是否有语法错误
-            
             if(status !== lua.LUA_OK) {
                 const errorMsg = lua.lua_tojsstring(this.L, -1);
                 console.error("Lua 运行错误:", errorMsg);

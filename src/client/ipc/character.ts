@@ -1,3 +1,4 @@
+import { win } from "../../main.js";
 import { app } from "../../renderer.js";
 import { SpineCharacter } from "../system/character/SpineCharacter.js"
 
@@ -80,5 +81,5 @@ export class CharacterIPC{
             const data =this.characters[id].hitChecker.getHitBoundingBox(x,y)
             window.electronAPI.character.sendCheckHit(id,data)
         })
-    } 
+    }
 }

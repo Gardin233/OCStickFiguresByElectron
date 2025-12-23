@@ -41,7 +41,7 @@ export class TimeManager {
         while (this.queue.length > 0) {
             const data = this.queue.shift()!;
 
-            lua.lua_getglobal(this.L, 'Gwin');
+            lua.lua_getglobal(this.L, 'Gsys');
             if (lua.lua_type(this.L, -1) !== lua.LUA_TTABLE) {
                 lua.lua_pop(this.L, 1);
                 continue;

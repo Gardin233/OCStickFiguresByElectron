@@ -2,14 +2,14 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>无边框窗口</title>
+  <title>无边框窗口（这个不起作用）</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      background: #1e1e1e;
+      background: #ff7d7d;
       color: #ddd;
       font-family: system-ui, sans-serif;
       user-select: none;
@@ -48,7 +48,7 @@
     }
 
     .btn:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgb(255, 160, 241);
     }
 
     .btn.close:hover {
@@ -69,7 +69,7 @@
 <body>
 
   <div class="titlebar">
-    <div class="title">你好，Electron</div>
+    <div class="title">♥</div>
     <div class="window-controls">
       <button class="btn minimize">—</button>
       <button class="btn maximize">▢</button>
@@ -78,9 +78,7 @@
   </div>
 
   <div class="content">
-    <h3>无 frame 窗口</h3>
-    <p>这是一个自定义标题栏的 Electron 窗口。</p>
-    <p>你可以在这里放编辑器、舞台、时间线、Lua UI。</p>
+  
   </div>
 
   <script>
