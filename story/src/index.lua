@@ -1,7 +1,7 @@
 local Libpath  = "./story/src/?.lua;./story/src/?/init.lua;"
 local Libpath2 = "./story/lib/base/?.lua;./story/lib/complib/?.lua;./story/lib/?.lua;./story/lib/?/init.lua;"
 package.path = Libpath .. Libpath2 .. package.path
-local Timeline = require "timeline"
+local Timeline = require "base.timeline"
 print("当前 package.path: ", package.path)
 
 ---@class Gsys

@@ -4,7 +4,7 @@ local Gwin = _G.Gwin
 local Character =_G.Character
 ---@class Audio
 local Audio =_G.Audio
-local Timeline = require "timeline"
+local Timeline = require "base.timeline"
 local times = 0
 math.randomseed(os.time())
 

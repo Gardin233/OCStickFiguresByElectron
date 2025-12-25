@@ -28,4 +28,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     //翻转
     flip:(callback)=>{ipcRenderer.on('flip',(_,id,isLeft)=>callback(id,isLeft))}
   },
+  text:{
+    createText:(callback)=>{ipcRenderer.on('create-text',(_,id,content,style)=>callback(id,content,style))},
+    deleteText:(callback)=>{ipcRenderer.on('delete-text',(_,id)=>callback(id))},
+    setText:(callback)=>{ipcRenderer.on('set-text',(_,id,content)=>callback(id,content))},
+    setStyle:(callback)=>{ipcRenderer.on('set-style',(_,id,style)=>callback(id,style))}
+  }
 })

@@ -24,18 +24,11 @@ declare global {
         moveTo: (callback:(id: string, x: number, y: number, func?: string)=>void) => void
         flip: (callback:(id: string, isLeft: boolean)=>void) => void
       },
-      audio:{
-        //注册音频文件
-        loadBGMFiles:(callback:(BGMs:{id:string,url:string}[])=>void)=>void,
-        loadSFXFiles:(callback:(SFXs:{id:string,url:string}[])=>void)=>void,
-        //删除注册
-        unloadBGM:(callback:(id:string)=>void)=>void,
-        unloadSFX:(callback:(id:string)=>void)=>void, 
-        //启用播放
-        playBGM:(callback:(id:string,data:AudioPlayData)=>void)=>void,
-        playSFX:(callback:(id:string,data:AudioPlayData)=>void)=>void,
-        
-            
+      text:{
+        createText:(callback:(id: string, content: string, style: any)=>void) => void,
+        deleteText:(callback:(id: string)=>void) => void,
+        setText:(callback:(id: string, content: string)=>void) => void,
+        setStyle:(callback:(id: string, style: any)=>void) => void
       }
     }
   }
