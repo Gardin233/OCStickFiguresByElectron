@@ -7,14 +7,13 @@ import { CharacterIPCSender} from "../ipc/character.js";
 import { app } from "electron";
 import { getcheckHitAsync, getHitBoxAsync, getPosToHitBoxDistanceAsync} from "../Async/Character.js";
 import { pathToFileURL } from "url";
-import { resourcesBase } from "../../global.js";
+import {  storyBase } from "../../global.js";
 export class CharacterLib{
     private libNames:{name:string,func:Function}[]=[]
     L: any;
     constructor(L){
         this.L =L
         this.libNames = [
-       
             {name:"createNewCharacter",func:this.createNewCharacterSpine.bind(this)},
             {name:"deleteCharacter",func:this.delete.bind(this)},
             {name:"getHitBox",func:this.getHitBox.bind(this)},
@@ -41,8 +40,7 @@ private createNewCharacterSpine(L) {
     const id = interop.tojs(L, 2);     // 例如: "gardin"
     const spineFiles: Record<string, string> = {};
     // 2. 统一基础路径
-    const baseDir = path.join(resourcesBase, ".."); 
-    const fullJsonPath = path.join(baseDir,'story','assets', rawUrl);
+    const fullJsonPath = path.join(storyBase,'assets', rawUrl);
     if (!fs.existsSync(fullJsonPath)) {
         console.error("Spine 文件不存在:", fullJsonPath);
         return 0;

@@ -25,10 +25,25 @@ declare global {
         flip: (callback:(id: string, isLeft: boolean)=>void) => void
       },
       text:{
-        createText:(callback:(id: string, content: string, style: any)=>void) => void,
-        deleteText:(callback:(id: string)=>void) => void,
-        setText:(callback:(id: string, content: string)=>void) => void,
-        setStyle:(callback:(id: string, style: any)=>void) => void
+        bitText:{
+          loadFont:(callback:(id:string,url:string)=>void)=>void
+          create:(callback:(id:string,content:string,style:any,trans:any)=>void)=>void
+          setPos:(callback:(id:string,x:number,y:number)=>void)=>void
+          setStyle:(callback:(id:string,style:any)=>void)=>void
+          setContent:(callback:(id:string,content:string)=>void)=>void
+          setScale:(callback:(id:string,scaleX:number,scaleY:number)=>void)=>void
+          setRotation:(callback:(id:string,rotation:number)=>void)=>void
+          remove:(callback:(id:string)=>void)=>void
+        }
+        commonText:{
+          create:(callback:(id:string,content:string,style:any,trans:any)=>void)=>void
+          setPos:(callback:(id:string,x:number,y:number)=>void)=>void
+          setStyle:(callback:(id:string,style:any)=>void)=>void
+          setContent:(callback:(id:string,content:string)=>void)=>void
+          setScale:(callback:(id:string,scaleX:number,scaleY:number)=>void)=>void
+          setRotation:(callback:(id:string,rotation:number)=>void)=>void
+          remove:(callback:(id:string)=>void)=>void
+        }
       }
     }
   }

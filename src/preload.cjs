@@ -1,5 +1,4 @@
 const { contextBridge, ipcRenderer } = require('electron')
-
 contextBridge.exposeInMainWorld('electronAPI', {
   close:()=>{ipcRenderer.send(`win:close`)},
   minimize:()=>{ipcRenderer.send(`win:minimize`)},
@@ -29,9 +28,24 @@ contextBridge.exposeInMainWorld('electronAPI', {
     flip:(callback)=>{ipcRenderer.on('flip',(_,id,isLeft)=>callback(id,isLeft))}
   },
   text:{
-    createText:(callback)=>{ipcRenderer.on('create-text',(_,id,content,style)=>callback(id,content,style))},
-    deleteText:(callback)=>{ipcRenderer.on('delete-text',(_,id)=>callback(id))},
-    setText:(callback)=>{ipcRenderer.on('set-text',(_,id,content)=>callback(id,content))},
-    setStyle:(callback)=>{ipcRenderer.on('set-style',(_,id,style)=>callback(id,style))}
+    bitText:{
+      loadFont:(callback)=>{ipcRenderer.on('load-font',(_,id,url)=>callback(id,url))},
+      create:(callback)=>{ipcRenderer.on('create-bit-text',(_,id,content,style,trans)=>callback(id,content,style,trans))},
+      remove:(callback)=>{ipcRenderer.on('remove-bit-text',(_,id)=>callback(id))},
+      setPos:(callback)=>{ipcRenderer.on('set-bit-pos',(_,id,x,y)=>callback(id,x,y))},
+      setStyle:(callback)=>{ipcRenderer.on('set-bit-style',(_,id,style)=>callback(id,style))},
+      setContent:(callback)=>{ipcRenderer.on('set-bit-content',(_,id,content)=>callback(id,content))},
+      setScale:(callback)=>{ipcRenderer.on('set-bit-scale',(_,id,scaleX,scaleY)=>callback(id,scaleX,scaleY))},
+      setRotation:(callback)=>{ipcRenderer.on('set-bit-rotation',(_,id,rotation)=>callback(id,rotation))},
+    },
+    commonText:{
+      create:(callback)=>{ipcRenderer.on('create-common-text',(_,id,content,style,trans)=>callback(id,content,style,trans))},
+      remove:(callback)=>{ipcRenderer.on('remove-common-text',(_,id)=>callback(id))},
+      setPos:(callback)=>{ipcRenderer.on('set-common-pos',(_,id,content)=>callback(id,content))},
+      setStyle:(callback)=>{ipcRenderer.on('set-common-style',(_,id,style)=>callback(id,style))},
+      setContent:(callback)=>{ipcRenderer.on('set-common-content',(_,id,content)=>callback(id,content))},
+      setScale:(callback)=>{ipcRenderer.on('set-common-scale',(_,id,scaleX,scaleY)=>callback(id,scaleX,scaleY))},
+      setRotation:(callback)=>{ipcRenderer.on('set-common-rotation',(_,id,rotation)=>callback(id,rotation))},
+    },
   }
 })

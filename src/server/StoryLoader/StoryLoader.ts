@@ -10,6 +10,8 @@ import { TimeManager } from "./listener/time.js";
 
 import { to_luastring } from "fengari";
 import { SysLib } from "./SysLib.js";
+import { TextLib } from "./TextLib.js";
+import { BitTextLib } from "./BitmapTextLib.js";
 
 export const lua = fengari.lua;
 export const lauxlib = fengari.lauxlib;
@@ -22,6 +24,8 @@ export class StoryLoader{
     private inputMgr:InputManager
     private timeMgr:TimeManager
     private SysLib:SysLib
+    private TextLib:TextLib
+    private BitmapTextLib:BitTextLib
     constructor(){
         this.SysLib = new SysLib(this.L)
         this.windowLib=new WindowLib(this.L)
@@ -29,6 +33,8 @@ export class StoryLoader{
         this.audioLib= new AudioLib(this.L)
         this.inputMgr = new InputManager(this.L);
         this.timeMgr =new TimeManager(this.L)
+        this.TextLib=new TextLib(this.L)
+        this.BitmapTextLib=new BitTextLib(this.L)
         lualib.luaL_openlibs(this.L);//打开 Lua 标准库 (print, math, string 等)
         interop.luaopen_js(this.L);//启用 JS 互操作库 (关键步骤) 这让 Lua 可以理解 JS 的对象和函数
         this.L.global
@@ -36,6 +42,8 @@ export class StoryLoader{
     public Init(){
         this.SysLib.Init()
         this.windowLib.Init()
+        this.TextLib.init()
+        this.BitmapTextLib.init()
         this.characterLib.Init()
         this.audioLib.Init()
         this.inputMgr.start();

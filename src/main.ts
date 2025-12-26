@@ -10,6 +10,7 @@ import { setWindow } from './server/utils/windowLoader/basic/setting.js';
 import { lua, StoryLoader } from './server/StoryLoader/StoryLoader.js';
 import { windowController } from './server/utils/windowLoader/windowController.js';
 import cp from 'child_process';
+import { storyBase } from './global.js';
 if (app.isPackaged) {
     const originalSpawn = cp.spawn;
     // @ts-ignore
@@ -45,7 +46,6 @@ ipcMain.handle('get-desktop-icons', async () => {
     return SYS_ICONS;
   })
 }
-
 // app 生命周期
 app.whenReady().then(Start).then(() => {
   // openEXE('C:\\Windows\\System32\\notepad.exe')
